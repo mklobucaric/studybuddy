@@ -1,0 +1,26 @@
+{
+    "title": "Obrazovna aplikacija za djecu",
+    "login": "Prijava",
+    "register": "Registriraj se",
+    "email": "Email",
+    "password": "Lozinka",
+    "confirm_password": "Potvrdi lozinku",
+    "logout": "Odjavi se",
+    "home": "Početna",
+    "settings": "Postavke",
+    "questions": "Pitanja",
+    "upload_document": "Prenesi dokument",
+    "pick_document": "Odaberi dokument",
+    "take_photo": "Uslikaj",
+    "submit_question": "Postavi pitanje",
+    "no_questions_available": "Nema dostupnih pitanja.",
+    "loading": "Učitavanje...",
+    "error_message": "Došlo je do pogreške. Molimo pokušajte ponovno.",
+    "document_picker_hint": "Odaberite dokument s vašeg uređaja.",
+    "camera_hint": "Fotografirajte svoj dokument.",
+    "ask_question_hint": "Upišite svoje pitanje ovdje...",
+    "submit": "Pošalji",
+    "cancel": "Otkaži"
+
+  }
+  

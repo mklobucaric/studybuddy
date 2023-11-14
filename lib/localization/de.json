@@ -1,0 +1,26 @@
+{
+    "title": "Kinderfreundliche Bildungs-App",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirm_password": "Passwort bestätigen",
+    "logout": "Abmelden",
+    "home": "Startseite",
+    "settings": "Einstellungen",
+    "questions": "Fragen",
+    "upload_document": "Dokument hochladen",
+    "pick_document": "Dokument auswählen",
+    "take_photo": "Foto machen",
+    "submit_question": "Frage stellen",
+    "no_questions_available": "Keine Fragen verfügbar.",
+    "loading": "Laden...",
+    "error_message": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "document_picker_hint": "Wählen Sie ein Dokument von Ihrem Gerät aus.",
+    "camera_hint": "Fotografieren Sie Ihr Dokument.",
+    "ask_question_hint": "Geben Sie hier Ihre Frage ein...",
+    "submit": "Absenden",
+    "cancel": "Abbrechen"
+
+  }
+  

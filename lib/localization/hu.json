@@ -1,0 +1,26 @@
+{
+    "title": "Gyerekbarát Oktatóalkalmazás",
+    "login": "Bejelentkezés",
+    "register": "Regisztráció",
+    "email": "E-mail",
+    "password": "Jelszó",
+    "confirm_password": "Jelszó megerősítése",
+    "logout": "Kijelentkezés",
+    "home": "Kezdőlap",
+    "settings": "Beállítások",
+    "questions": "Kérdések",
+    "upload_document": "Dokumentum feltöltése",
+    "pick_document": "Dokumentum kiválasztása",
+    "take_photo": "Fénykép készítése",
+    "submit_question": "Kérdés beküldése",
+    "no_questions_available": "Nincsenek elérhető kérdések.",
+    "loading": "Betöltés...",
+    "error_message": "Hiba történt. Kérjük, próbálja újra.",
+    "document_picker_hint": "Válasszon dokumentumot az eszközéről.",
+    "camera_hint": "Fotózza le a dokumentumot.",
+    "ask_question_hint": "Írja be a kérdését ide...",
+    "submit": "Beküldés",
+    "cancel": "Mégse"
+
+  }
+  
