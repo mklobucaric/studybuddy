@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_service.dart';
+import 'package:studybuddy/src/services/auth_service.dart';
 
 class RegistrationView extends StatefulWidget {
   @override
@@ -37,7 +37,7 @@ class _RegistrationViewState extends State<RegistrationView> {
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
@@ -46,7 +46,7 @@ class _RegistrationViewState extends State<RegistrationView> {
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
               ),
@@ -55,7 +55,7 @@ class _RegistrationViewState extends State<RegistrationView> {
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Confirm Password',
                 border: OutlineInputBorder(),
               ),

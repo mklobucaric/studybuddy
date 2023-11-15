@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class DocumentPickerView extends StatefulWidget {
+  const DocumentPickerView({super.key});
+
   @override
   _DocumentPickerViewState createState() => _DocumentPickerViewState();
 }
@@ -13,7 +15,7 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick a Document'),
+        title: const Text('Pick a Document'),
       ),
       body: Center(
         child: Column(
@@ -21,12 +23,12 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
           children: <Widget>[
             ElevatedButton(
               onPressed: _pickDocument,
-              child: Text('Select Document'),
+              child: const Text('Select Document'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _pickedFileName != null
                 ? Text('Selected File: $_pickedFileName')
-                : Text('No file selected.'),
+                : const Text('No file selected.'),
           ],
         ),
       ),

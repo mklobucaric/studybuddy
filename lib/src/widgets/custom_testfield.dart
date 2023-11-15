@@ -10,7 +10,8 @@ class CustomTextField extends StatelessWidget {
   final IconData? suffixIcon;
   final VoidCallback? onSuffixIconPress;
 
-  CustomTextField({
+  const CustomTextField({
+    super.key,
     required this.labelText,
     required this.controller,
     this.keyboardType = TextInputType.text,

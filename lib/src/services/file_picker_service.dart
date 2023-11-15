@@ -12,10 +12,10 @@ class FilePickerService {
     }
   }
 
-  Future<List<FilePickerResult>?> pickMultipleFiles(
+  Future<FilePickerResult?> pickMultipleFiles(
       {FileType fileType = FileType.any}) async {
     try {
-      List<FilePickerResult>? results = await FilePicker.platform.pickFiles(
+      FilePickerResult? results = await FilePicker.platform.pickFiles(
         type: fileType,
         allowMultiple: true,
       );

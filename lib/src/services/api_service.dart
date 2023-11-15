@@ -10,6 +10,7 @@ class ApiService {
   Future<String> uploadDocument(String filePath) async {
     // Implement the logic to upload a document
     // Return the response from the backend (e.g., URL of the uploaded document)
+    return "test"; // only for test purpose
   }
 
   // Function to fetch questions based on the uploaded content
