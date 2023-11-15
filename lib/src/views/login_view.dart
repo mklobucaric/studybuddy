@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:studybuddy/src/services/auth_service.dart';
+import 'package:studybuddy/src/controllers/authentication_controller.dart';
 
 class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+
   @override
   _LoginViewState createState() => _LoginViewState();
 }
@@ -9,7 +11,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
+  final AuthenticationController _authController = AuthenticationController();
   String _errorMessage = '';
 
   @override
@@ -23,10 +25,10 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,7 +41,7 @@ class _LoginViewState extends State<LoginView> {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -48,15 +50,15 @@ class _LoginViewState extends State<LoginView> {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               _errorMessage,
-              style: TextStyle(color: Colors.red),
+              style: const TextStyle(color: Colors.red),
               textAlign: TextAlign.center,
             ),
             // Add additional authentication options here
@@ -72,9 +74,9 @@ class _LoginViewState extends State<LoginView> {
     });
 
     try {
-      var user = await _authService.loginWithEmailPassword(
+      await _authController.login(
           _emailController.text, _passwordController.text);
-      if (user != null) {
+      if (_authController.currentUser != null) {
         // Navigate to the home screen or another appropriate screen
       } else {
         setState(() {

@@ -3,13 +3,16 @@ import 'camera_view.dart';
 import 'document_picker_view.dart';
 import 'questions_view.dart';
 import 'ask_question_view.dart';
+import 'package:studybuddy/src/widgets/custom_button.dart';
 
 class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kid-Friendly Educational App'),
+        title: const Text('Study Buddy'),
       ),
       body: Center(
         child: Column(
@@ -28,17 +31,14 @@ class HomeView extends StatelessWidget {
   Widget _buildButton(BuildContext context, String text, Widget view) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
+      child: CustomButton(
+        text: text,
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => view),
         ),
-        child: Text(text),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue, // Use vibrant colors suitable for kids
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-        ),
+        color: Colors.blue,
+        textColor: Colors.white,
       ),
     );
   }

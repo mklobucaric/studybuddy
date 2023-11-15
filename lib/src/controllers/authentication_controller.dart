@@ -56,5 +56,20 @@ class AuthenticationController with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> signInWithGoogle() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _currentUser = await _authService.signInWithGoogle();
+      // Handle successful sign in
+    } catch (e) {
+      // Handle sign-in error
+      print('Google Sign-In Error: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
   // Implement additional authentication methods as needed
 }

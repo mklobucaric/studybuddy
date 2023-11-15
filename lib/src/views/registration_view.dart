@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studybuddy/src/services/auth_service.dart';
+import 'package:studybuddy/src/controllers/authentication_controller.dart';
 
 class RegistrationView extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final AuthService _authService = AuthService();
+  final AuthenticationController _authController = AuthenticationController();
   String _errorMessage = '';
 
   @override
@@ -88,9 +88,9 @@ class _RegistrationViewState extends State<RegistrationView> {
     }
 
     try {
-      var user = await _authService.registerWithEmailPassword(
+      await _authController.register(
           _emailController.text, _passwordController.text);
-      if (user != null) {
+      if (_authController.currentUser != null) {
         // Navigate to the home screen or another appropriate screen
       } else {
         setState(() {
