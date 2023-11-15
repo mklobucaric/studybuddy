@@ -15,6 +15,7 @@ windows/
 web/
 macos/
 test/
+lib/firebase_options.dart
 .metadata
 analysis_options.yaml
 chat_gpt_app.code-workspace

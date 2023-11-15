@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'api_service.dart';
-import 'package:your_project_name/src/models/question.dart'; // Update with your actual path
+import 'package:studybuddy/src/models/question.dart';
+import 'package:studybuddy/src/services/api_service.dart';
 
 class QuestionController with ChangeNotifier {
   ApiService _apiService = ApiService();

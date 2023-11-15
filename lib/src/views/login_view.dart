@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_service.dart';
+import 'package:studybuddy/src/services/auth_service.dart';
 
 class LoginView extends StatefulWidget {
   @override

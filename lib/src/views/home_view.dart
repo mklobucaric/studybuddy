@@ -35,9 +35,9 @@ class HomeView extends StatelessWidget {
         ),
         child: Text(text),
         style: ElevatedButton.styleFrom(
-          primary: Colors.blue, // Use vibrant colors suitable for kids
-          onPrimary: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+          backgroundColor: Colors.blue, // Use vibrant colors suitable for kids
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
         ),
       ),
     );

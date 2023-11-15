@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'api_service.dart';
+import 'package:studybuddy/src/services/api_service.dart';
 import 'dart:io';
 
 class DocumentController with ChangeNotifier {

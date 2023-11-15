@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:your_project_name/src/models/question.dart'; // Update with your actual path
+import 'package:studybuddy/src/models/question.dart';
 
 class QuestionsView extends StatefulWidget {
   @override
