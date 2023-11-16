@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'src/views/home_view.dart';
 import 'theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'src/utils/constants.dart';
+import 'src/routing/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,11 +19,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Kid-Friendly Educational App',
       theme: AppTheme.lightTheme, // Define your theme in app_theme.dart
       debugShowCheckedModeBanner: false,
-      home: HomeView(), // The initial view of your app.
+      //     home: HomeView(), // The initial view of your app.
+      routerConfig: AppRoutes.router,
     );
   }
 }

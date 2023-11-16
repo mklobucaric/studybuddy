@@ -11,8 +11,8 @@ class AppTheme {
           ColorScheme.fromSwatch().copyWith(secondary: Colors.orangeAccent),
 
       // Define the default font family.
-      fontFamily: 'Montserrat', // Make sure to add the font in pubspec.yaml
-
+      fontFamily: 'Poppins', // Make sure to add the font in pubspec.yaml
+      //   fontFamily: 'Montserrat', // Make sure to add the font in pubspec.yaml
       // Define the default TextTheme. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: const TextTheme(
@@ -35,14 +35,26 @@ class AppTheme {
 
       // Other customizations like AppBar, FAB
       appBarTheme: const AppBarTheme(
-        color: Colors.blueAccent,
+        color: Color.fromARGB(255, 14, 135, 191), // Softer shade of blue
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
         toolbarTextStyle: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
         titleTextStyle: TextStyle(
-          fontSize: 20.0,
+          color: Colors.white, // White text for better contrast
+          fontSize: 22.0,
           fontWeight: FontWeight.bold,
+          fontFamily: 'Poppins', // Keeping the fun and legible font
+          shadows: [
+            Shadow(
+              // Shadow for a 3D effect
+              offset: Offset(1.0, 1.0),
+              blurRadius: 3.0,
+              color: Color.fromRGBO(0, 0, 0, 0.3),
+            ),
+          ],
         ),
       ),
     );

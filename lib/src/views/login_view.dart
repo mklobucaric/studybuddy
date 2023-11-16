@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/controllers/authentication_controller.dart';
+import 'package:go_router/go_router.dart';
+import 'package:studybuddy/src/utils/validators.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -60,6 +62,10 @@ class _LoginViewState extends State<LoginView> {
               _errorMessage,
               style: const TextStyle(color: Colors.red),
               textAlign: TextAlign.center,
+            ),
+            TextButton(
+              onPressed: () => context.go('/register'),
+              child: const Text("Don't have an account? Sign up"),
             ),
             // Add additional authentication options here
           ],
