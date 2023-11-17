@@ -1,15 +1,21 @@
 class User {
   final String id;
-  final String name;
+  final String firstName;
+  final String lastName;
   final String email;
   // Add additional fields as necessary, like profile picture URL, age, etc.
 
-  User({required this.id, required this.name, required this.email});
+  User(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.email});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] as String,
-      name: json['name'] as String,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
       email: json['email'] as String,
       // Initialize additional fields here if added
     );
@@ -18,7 +24,8 @@ class User {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
+      'firstName': firstName,
+      'lastName': lastName,
       'email': email,
       // Convert additional fields to JSON if added
     };

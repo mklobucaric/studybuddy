@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/controllers/authentication_controller.dart';
 import 'package:go_router/go_router.dart';
-import 'package:studybuddy/src/utils/validators.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -54,8 +53,15 @@ class _LoginViewState extends State<LoginView> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _login,
+              onPressed: () => _login(context),
               child: const Text('Login'),
+            ),
+            const SizedBox(height: 10),
+            // Google Sign-In Button
+            ElevatedButton(
+              onPressed: () => _loginWithGoogle(context),
+              child: const Text('Sign in with Google'),
+              // You can add more styling as needed
             ),
             const SizedBox(height: 10),
             Text(
@@ -74,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void _login() async {
+  void _login(BuildContext context) async {
     setState(() {
       _errorMessage = '';
     });
@@ -84,6 +90,31 @@ class _LoginViewState extends State<LoginView> {
           _emailController.text, _passwordController.text);
       if (_authController.currentUser != null) {
         // Navigate to the home screen or another appropriate screen
+        if (!mounted) return;
+        GoRouter.of(context).go('/home');
+      } else {
+        setState(() {
+          _errorMessage = 'Login failed. Please try again.';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    }
+  }
+
+  void _loginWithGoogle(BuildContext context) async {
+    setState(() {
+      _errorMessage = '';
+    });
+
+    try {
+      await _authController.signInWithGoogle();
+      if (_authController.currentUser != null) {
+        // Navigate to the home screen or another appropriate screen
+        if (!mounted) return;
+        GoRouter.of(context).go('/home');
       } else {
         setState(() {
           _errorMessage = 'Login failed. Please try again.';

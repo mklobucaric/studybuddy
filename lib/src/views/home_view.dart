@@ -13,6 +13,29 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Study Buddy'),
+        actions: <Widget>[
+          // User name display and Sign out dropdown
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              if (result == 'signout') {
+                // Call sign-out method from authentication_controller
+                // Navigate to sign-in view
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'signout',
+                child: Text('${currentUser.firstName} ${currentUser.lastName}'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'signout',
+                child: const Text('Sign Out'),
+              ),
+            ],
+          ),
+          // Localization dropdown
+          // Similar implementation with language options
+        ],
       ),
       body: Center(
         child: Column(
