@@ -1,18 +1,18 @@
-class User {
+class UserJson {
   final String id;
   final String firstName;
   final String lastName;
   final String email;
   // Add additional fields as necessary, like profile picture URL, age, etc.
 
-  User(
+  UserJson(
       {required this.id,
       required this.firstName,
       required this.lastName,
       required this.email});
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserJson.fromJson(Map<String, dynamic> json) {
+    return UserJson(
       id: json['id'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,

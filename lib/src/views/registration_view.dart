@@ -137,7 +137,7 @@ class _RegistrationViewState extends State<RegistrationView> {
           _emailController.text, _passwordController.text);
       if (_authController.currentUser != null) {
         // Create a new user object
-        User user = User(
+        UserJson user = UserJson(
           id: _authController.currentUser!.uid,
           firstName: _firstNameController.text,
           lastName: _lastNameController.text,

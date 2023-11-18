@@ -1,40 +1,88 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:studybuddy/src/controllers/authentication_controller.dart';
 import 'camera_view.dart';
 import 'document_picker_view.dart';
 import 'questions_view.dart';
 import 'ask_question_view.dart';
 import 'package:studybuddy/src/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<StatefulWidget> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
   Widget build(BuildContext context) {
+    var authController = Provider.of<AuthenticationController>(context);
+    var currentUserJson = authController.currentUserJson;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Study Buddy'),
         actions: <Widget>[
-          // User name display and Sign out dropdown
+          TextButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Wrap(
+                    children: <Widget>[
+                      ListTile(
+                        leading: const Icon(Icons.exit_to_app),
+                        title: const Text('Sign Out'),
+                        onTap: () {
+                          // Perform sign-out logic
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context)
+                  .primaryTextTheme
+                  .titleLarge
+                  ?.color, // Ensures text color matches AppBar
+              padding: EdgeInsets.symmetric(
+                  horizontal: 16), // Same horizontal padding as InkWell
+            ),
+            child: Text(
+              '${currentUserJson?.firstName ?? ""} ${currentUserJson?.lastName ?? ""}',
+            ),
+          ),
           PopupMenuButton<String>(
-            onSelected: (String result) {
-              if (result == 'signout') {
-                // Call sign-out method from authentication_controller
-                // Navigate to sign-in view
-              }
+            onSelected: (String value) {
+              // Handle localization change
+              // You would typically call a function here that sets the locale for your app
+              // For example: context.setLocale(Locale(value));
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                value: 'signout',
-                child: Text('${currentUser.firstName} ${currentUser.lastName}'),
+              const PopupMenuItem<String>(
+                value: 'en',
+                child: Text('English'),
               ),
               const PopupMenuItem<String>(
-                value: 'signout',
-                child: const Text('Sign Out'),
+                value: 'de',
+                child: Text('Deutsch'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hr',
+                child: Text('Hrvatski'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hu',
+                child: Text('Magyar'),
               ),
             ],
+            icon: const Icon(Icons.language), // Icon for the dropdown button
           ),
-          // Localization dropdown
-          // Similar implementation with language options
+          // ... other actions if needed
+          // You can add more actions here if needed
         ],
       ),
       body: Center(

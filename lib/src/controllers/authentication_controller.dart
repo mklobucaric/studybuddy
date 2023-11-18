@@ -1,17 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:studybuddy/src/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:studybuddy/src/models/user.dart';
 
 class AuthenticationController with ChangeNotifier {
   final AuthService _authService = AuthService();
   User? _currentUser;
+  UserJson? _currentUserJson;
   bool _isLoading = false;
 
   User? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
+  UserJson? get currentUserJson => _currentUserJson;
 
   AuthenticationController() {
     _checkCurrentUser();
+    _checkCurrentUserJson();
   }
 
   void _checkCurrentUser() {
@@ -71,5 +75,15 @@ class AuthenticationController with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void _checkCurrentUserJson() async {
+    var firebaseUser = _authService.currentUser; // This returns a Firebase User
+    if (firebaseUser != null) {
+      _currentUserJson = await _authService
+          .fetchUserData(firebaseUser.uid); // Fetching custom user data
+      notifyListeners();
+    }
+  }
+
   // Implement additional authentication methods as needed
 }

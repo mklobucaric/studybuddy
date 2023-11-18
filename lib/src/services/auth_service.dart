@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:studybuddy/src/models/user.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // User Registration with Email and Password
@@ -54,6 +57,12 @@ class AuthService {
       print(e); // Handle the error properly
       return null;
     }
+  }
+
+  Future<UserJson> fetchUserData(String userId) async {
+    var userDoc = await _firestore.collection('users').doc(userId).get();
+    return UserJson.fromJson(
+        userDoc.data()!); // Assuming 'User' is your model class
   }
 
   // Check if User is Logged In
