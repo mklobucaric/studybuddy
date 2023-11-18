@@ -26,6 +26,12 @@ class _HomeViewState extends State<HomeView> {
     // Using AppLocalizations to get localized strings
     var localizations = AppLocalizations.of(context);
 
+    // Determine the number of items in the grid
+    int gridItemCount = 4; // Adjust as needed
+
+    // Calculate the aspect ratio for the cards
+    double cardAspectRatio = 4 / 3; // Example aspect ratio
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations?.translate('title') ??
@@ -96,35 +102,81 @@ class _HomeViewState extends State<HomeView> {
           // You can add more actions here if needed
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _buildButton(context, 'take_photo', CameraView()),
-            _buildButton(context, 'pick_document', DocumentPickerView()),
-            _buildButton(context, 'questions', QuestionsView()),
-            _buildButton(context, 'submit_question', AskQuestionView()),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Two items per row
+            childAspectRatio:
+                cardAspectRatio, // Set the aspect ratio of the card
+          ),
+          itemCount: gridItemCount,
+          itemBuilder: (context, index) {
+            // Based on index, you can determine which card to build
+            switch (index) {
+              case 0:
+                return _buildInteractiveCard(
+                    context, 'take_photo', CameraView());
+              case 1:
+                return _buildInteractiveCard(
+                    context, 'pick_document', DocumentPickerView());
+              case 2:
+                return _buildInteractiveCard(
+                    context, 'questions', QuestionsView());
+              case 3:
+                return _buildInteractiveCard(
+                    context, 'submit_question', AskQuestionView());
+              default:
+                return Placeholder(); // Fallback placeholder
+            }
+          },
         ),
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context, String text, Widget view) {
-    var localizations = AppLocalizations.of(context);
+  Widget _buildInteractiveCard(
+      BuildContext context, String label, Widget destination) {
+    var localizations = AppLocalizations.of(context); // For localized text
+
+    // Define card size
+    double cardWidth =
+        MediaQuery.of(context).size.width / 2 - 16; // Adjust width as needed
+    double cardHeight = cardWidth * 0.5; // Maintain a good aspect ratio
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(minWidth: 250.0), // Makes the button stretch
-        child: CustomButton(
-          text: localizations?.translate(text) ?? 'Default Text',
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => view),
+      padding: const EdgeInsets.all(
+          4.0), // Reduced padding for better space utilization
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => destination),
+        ),
+        child: Card(
+          elevation: 5,
+          child: Container(
+            width: cardWidth,
+            height: cardHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Image.asset('assets/images/${label}_icon.png',
+                      fit: BoxFit.contain), // Adjust image size within card
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    localizations?.translate(label) ?? 'Default Text',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight:
+                            FontWeight.bold), // Adjust font size if necessary
+                  ),
+                ),
+              ],
+            ),
           ),
-          color: Colors.blue,
-          textColor: Colors.white,
         ),
       ),
     );
