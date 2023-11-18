@@ -1,5 +1,5 @@
 {
-    "title": "Gyerekbarát Oktatóalkalmazás",
+    "title": "Study Buddy",
     "login": "Bejelentkezés",
     "register": "Regisztráció",
     "email": "E-mail",
@@ -11,8 +11,8 @@
     "questions": "Kérdések",
     "upload_document": "Dokumentum feltöltése",
     "pick_document": "Dokumentum kiválasztása",
-    "take_photo": "Fénykép készítése",
-    "submit_question": "Kérdés beküldése",
+    "take_photo": "Kérdezések megtekintése",
+    "submit_question": "Tegyen fel egy kérdést",
     "no_questions_available": "Nincsenek elérhető kérdések.",
     "loading": "Betöltés...",
     "error_message": "Hiba történt. Kérjük, próbálja újra.",

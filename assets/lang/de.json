@@ -1,5 +1,5 @@
 {
-    "title": "Kinderfreundliche Bildungs-App",
+    "title": "Study Buddy", 
     "login": "Anmelden",
     "register": "Registrieren",
     "email": "E-Mail",
@@ -8,7 +8,7 @@
     "logout": "Abmelden",
     "home": "Startseite",
     "settings": "Einstellungen",
-    "questions": "Fragen",
+    "questions": "Fragen anzeigen",
     "upload_document": "Dokument hochladen",
     "pick_document": "Dokument auswählen",
     "take_photo": "Foto machen",

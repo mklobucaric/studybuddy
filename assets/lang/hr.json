@@ -1,5 +1,5 @@
 {
-    "title": "Obrazovna aplikacija za djecu",
+    "title": "Study Buddy",
     "login": "Prijava",
     "register": "Registriraj se",
     "email": "Email",
@@ -8,7 +8,7 @@
     "logout": "Odjavi se",
     "home": "Početna",
     "settings": "Postavke",
-    "questions": "Pitanja",
+    "questions": "Pogledaj pitanja",
     "upload_document": "Prenesi dokument",
     "pick_document": "Odaberi dokument",
     "take_photo": "Uslikaj",

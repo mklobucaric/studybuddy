@@ -7,6 +7,8 @@ import 'questions_view.dart';
 import 'ask_question_view.dart';
 import 'package:studybuddy/src/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -20,9 +22,14 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     var authController = Provider.of<AuthenticationController>(context);
     var currentUserJson = authController.currentUserJson;
+
+    // Using AppLocalizations to get localized strings
+    var localizations = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Study Buddy'),
+        title: Text(localizations?.translate('title') ??
+            'Study Buddy'), // Localized title
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -33,7 +40,8 @@ class _HomeViewState extends State<HomeView> {
                     children: <Widget>[
                       ListTile(
                         leading: const Icon(Icons.exit_to_app),
-                        title: const Text('Sign Out'),
+                        title: Text(localizations?.translate('logout') ??
+                            'Logout'), // Localized text
                         onTap: () {
                           // Perform sign-out logic
                         },
@@ -60,6 +68,9 @@ class _HomeViewState extends State<HomeView> {
               // Handle localization change
               // You would typically call a function here that sets the locale for your app
               // For example: context.setLocale(Locale(value));
+              var localeProvider =
+                  Provider.of<LocaleProvider>(context, listen: false);
+              localeProvider.setLocale(Locale(value));
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
@@ -89,10 +100,10 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _buildButton(context, 'Take Photos', CameraView()),
-            _buildButton(context, 'Pick Document', DocumentPickerView()),
-            _buildButton(context, 'View Questions', QuestionsView()),
-            _buildButton(context, 'Ask a Question', AskQuestionView()),
+            _buildButton(context, 'take_photo', CameraView()),
+            _buildButton(context, 'pick_document', DocumentPickerView()),
+            _buildButton(context, 'questions', QuestionsView()),
+            _buildButton(context, 'submit_question', AskQuestionView()),
           ],
         ),
       ),
@@ -100,16 +111,21 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildButton(BuildContext context, String text, Widget view) {
+    var localizations = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: CustomButton(
-        text: text,
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => view),
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(minWidth: 250.0), // Makes the button stretch
+        child: CustomButton(
+          text: localizations?.translate(text) ?? 'Default Text',
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => view),
+          ),
+          color: Colors.blue,
+          textColor: Colors.white,
         ),
-        color: Colors.blue,
-        textColor: Colors.white,
       ),
     );
   }

@@ -41,7 +41,7 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) {
     // List all of the supported languages here
-    return ['en', 'de', 'hu', 'hr'].contains(locale.languageCode);
+    return ['en', 'de', 'hr', 'hu'].contains(locale.languageCode);
   }
 
   @override

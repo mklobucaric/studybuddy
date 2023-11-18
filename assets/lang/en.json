@@ -1,5 +1,5 @@
 {
-    "title": "Kid-Friendly Educational App",
+    "title": "Study Buddy",
     "login": "Login",
     "register": "Register",
     "email": "Email",
@@ -8,11 +8,11 @@
     "logout": "Logout",
     "home": "Home",
     "settings": "Settings",
-    "questions": "Questions",
+    "questions": "View Questions",
     "upload_document": "Upload Document",
     "pick_document": "Pick Document",
     "take_photo": "Take Photo",
-    "submit_question": "Submit Question",
+    "submit_question": "Ask a Question",
     "no_questions_available": "No questions available.",
     "loading": "Loading...",
     "error_message": "An error occurred. Please try again.",
@@ -20,7 +20,7 @@
     "camera_hint": "Capture a photo of your document.",
     "ask_question_hint": "Type your question here...",
     "submit": "Submit",
-    "cancel": "Cancel",
+    "cancel": "Cancel"
 
   }
 
