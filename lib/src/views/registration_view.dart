@@ -4,8 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/validators.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:studybuddy/src/models/user.dart';
+import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationView extends StatefulWidget {
+  const RegistrationView({super.key});
+
   @override
   _RegistrationViewState createState() => _RegistrationViewState();
 }
@@ -32,9 +37,41 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: Text(localizations?.translate('register') ?? 'Register'),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              // Handle localization change
+              // You would typically call a function here that sets the locale for your app
+              // For example: context.setLocale(Locale(value));
+              var localeProvider =
+                  Provider.of<LocaleProvider>(context, listen: false);
+              localeProvider.setLocale(Locale(value));
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'en',
+                child: Text('English'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'de',
+                child: Text('Deutsch'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hr',
+                child: Text('Hrvatski'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hu',
+                child: Text('Magyar'),
+              ),
+            ],
+            icon: const Icon(Icons.language), // Icon for the dropdown button
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -44,17 +81,18 @@ class _RegistrationViewState extends State<RegistrationView> {
           children: <Widget>[
             TextField(
               controller: _firstNameController,
-              decoration: const InputDecoration(
-                labelText: 'First Name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText:
+                    localizations?.translate('first_name') ?? 'First Name',
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _lastNameController,
-              decoration: const InputDecoration(
-                labelText: 'Last Name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: localizations?.translate('last_name') ?? 'Last Name',
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
@@ -65,14 +103,15 @@ class _RegistrationViewState extends State<RegistrationView> {
                 if (value == null ||
                     value.isEmpty ||
                     !Validators.isValidEmail(value)) {
-                  return 'Please entar a valid email!';
+                  return localizations?.translate('valid_email') ??
+                      'Please entar a valid email!';
                 }
                 return null;
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: localizations?.translate('email') ?? 'Email',
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
@@ -83,29 +122,31 @@ class _RegistrationViewState extends State<RegistrationView> {
                 if (value == null ||
                     value.isEmpty ||
                     !Validators.isValidPassword(value)) {
-                  return 'Please entar a valid password!';
+                  return localizations?.translate('valid_password') ??
+                      'Please entar a valid password!';
                 }
                 return null;
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: localizations?.translate('password') ?? 'Password',
+                border: const OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextFormField(
               controller: _confirmPasswordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Confirm Password',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: localizations?.translate('confirm_password') ??
+                    'Confirm Password',
+                border: const OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _register(context),
-              child: const Text('Register'),
+              child: Text(localizations?.translate('register') ?? 'Register'),
             ),
             SizedBox(height: 10),
             Text(
@@ -115,7 +156,8 @@ class _RegistrationViewState extends State<RegistrationView> {
             ),
             TextButton(
               onPressed: () => context.go('/'),
-              child: const Text("Already have an account? Log in"),
+              child: Text(localizations?.translate('have_account') ??
+                  "Already have an account? Log in"),
             ),
           ],
         ),
@@ -124,16 +166,20 @@ class _RegistrationViewState extends State<RegistrationView> {
   }
 
   void _register(BuildContext context) async {
+    var localizations = AppLocalizations.of(context);
     setState(() {
       _errorMessage = '';
     });
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      setState(() => _errorMessage = 'Passwords do not match.');
+      setState(() => _errorMessage =
+          localizations?.translate('password_dont_match') ??
+              'Passwords do not match.');
+      return;
     }
 
     try {
-      await _authController.register(
+      String? _errorEmail = await _authController.register(
           _emailController.text, _passwordController.text);
       if (_authController.currentUser != null) {
         // Create a new user object
@@ -153,7 +199,14 @@ class _RegistrationViewState extends State<RegistrationView> {
         GoRouter.of(context).go('/home');
       } else {
         setState(() {
-          _errorMessage = 'Registration failed. Please try again.';
+          if (_errorEmail == "existing_email") {
+            _errorMessage = localizations?.translate('existing_email') ??
+                'An account already exists for that email.';
+          } else {
+            _errorMessage = localizations?.translate('registration_failed') ??
+                'Registration failed. Please try again.';
+            print(_errorEmail);
+          }
         });
       }
     } catch (e) {

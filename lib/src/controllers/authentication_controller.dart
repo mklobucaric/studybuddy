@@ -23,20 +23,28 @@ class AuthenticationController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> register(String email, String password) async {
+  Future<String?> register(String email, String password) async {
     _isLoading = true;
     notifyListeners();
+    String? errorMessage;
 
     try {
       _currentUser =
           await _authService.registerWithEmailPassword(email, password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        errorMessage = 'existing_email';
+        print("E-mail error");
+      }
     } catch (e) {
       // Handle registration error
       print('Registration Error: $e');
+      errorMessage = 'test';
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+    return errorMessage;
   }
 
   Future<void> login(String email, String password) async {
@@ -45,6 +53,8 @@ class AuthenticationController with ChangeNotifier {
 
     try {
       _currentUser = await _authService.loginWithEmailPassword(email, password);
+      _checkCurrentUserJson();
+      notifyListeners();
     } catch (e) {
       // Handle login error
       print('Login Error: $e');
@@ -57,6 +67,8 @@ class AuthenticationController with ChangeNotifier {
   Future<void> logout() async {
     await _authService.logout();
     _currentUser = null;
+    _currentUserJson = null;
+
     notifyListeners();
   }
 

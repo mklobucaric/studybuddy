@@ -4,7 +4,7 @@ import 'package:studybuddy/src/controllers/authentication_controller.dart';
 import 'theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'src/utils/constants.dart';
+// import 'src/utils/constants.dart';
 import 'src/routing/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:studybuddy/src/utils/localization.dart';

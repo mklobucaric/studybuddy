@@ -23,6 +23,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     var authController = Provider.of<AuthenticationController>(context);
     var currentUserJson = authController.currentUserJson;
+
     // Using AppLocalizations to get localized strings
     var localizations = AppLocalizations.of(context);
 

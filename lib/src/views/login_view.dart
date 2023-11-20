@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/controllers/authentication_controller.dart';
 import 'package:go_router/go_router.dart';
+import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -24,9 +27,41 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text(localizations?.translate('login') ?? 'Login'),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              // Handle localization change
+              // You would typically call a function here that sets the locale for your app
+              // For example: context.setLocale(Locale(value));
+              var localeProvider =
+                  Provider.of<LocaleProvider>(context, listen: false);
+              localeProvider.setLocale(Locale(value));
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'en',
+                child: Text('English'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'de',
+                child: Text('Deutsch'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hr',
+                child: Text('Hrvatski'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hu',
+                child: Text('Magyar'),
+              ),
+            ],
+            icon: const Icon(Icons.language), // Icon for the dropdown button
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -37,30 +72,34 @@ class _LoginViewState extends State<LoginView> {
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: localizations?.translate('email') ?? 'Email',
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: localizations?.translate('password') ?? 'Password',
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _login(context),
-              child: const Text('Login'),
+              child: Text(localizations?.translate('login') ?? 'Login',
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ),
             const SizedBox(height: 10),
             // Google Sign-In Button
             ElevatedButton(
               onPressed: () => _loginWithGoogle(context),
-              child: const Text('Sign in with Google'),
+              child: Text(
+                  localizations?.translate('login_Google') ??
+                      'Log in with Google',
+                  style: const TextStyle(fontFamily: 'Poppins')),
               // You can add more styling as needed
             ),
             const SizedBox(height: 10),
@@ -71,7 +110,8 @@ class _LoginViewState extends State<LoginView> {
             ),
             TextButton(
               onPressed: () => context.go('/register'),
-              child: const Text("Don't have an account? Sign up"),
+              child: Text(localizations?.translate("create_account") ??
+                  "Don't have an account? Sign up"),
             ),
             // Add additional authentication options here
           ],
@@ -80,7 +120,7 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void _login(BuildContext context) async {
+  Future<void> _login(BuildContext context) async {
     setState(() {
       _errorMessage = '';
     });
@@ -104,7 +144,7 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  void _loginWithGoogle(BuildContext context) async {
+  Future<void> _loginWithGoogle(BuildContext context) async {
     setState(() {
       _errorMessage = '';
     });

@@ -20,7 +20,17 @@
     "camera_hint": "Fotografieren Sie Ihr Dokument.",
     "ask_question_hint": "Geben Sie hier Ihre Frage ein...",
     "submit": "Absenden",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "login_Google" : "Mit Google anmelden",
+    "create_account" : "Noch kein Konto? Anmelden",
+    "first_name" : "Vorname",
+    "last_name" : "Nachname",
+    "have_account" : "Bereits ein Konto? Einloggen",
+    "valid_email" : "Bitte geben Sie eine gültige E-Mail-Adresse an!",
+    "valid_password" : "Bitte geben Sie ein gültiges Passwort ein!", 
+    "password_dont_match" : "Die Passwörter stimmen nicht überein.",
+    "registration_failed" : "Die Registrierung ist fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "existing_email" : "Es existiert bereits ein Konto für diese E-Mail-Adresse."
 
   }
   
