@@ -16,7 +16,7 @@ class AppRoutes {
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => RegistrationView(),
+        builder: (context, state) => const RegistrationView(),
       ),
     ],
   );

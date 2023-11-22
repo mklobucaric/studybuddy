@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AskQuestionView extends StatefulWidget {
+  const AskQuestionView({super.key});
+
   @override
   _AskQuestionViewState createState() => _AskQuestionViewState();
 }
@@ -19,32 +21,32 @@ class _AskQuestionViewState extends State<AskQuestionView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ask a Question'),
+        title: const Text('Ask a Question'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _questionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Your Question',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.text,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _sendQuestion,
-              child: Text('Submit Question'),
+              child: const Text('Submit Question'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _answer == null
                 ? Container()
                 : Text(
                     'Answer: $_answer',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
           ],
         ),

@@ -3,6 +3,8 @@ import 'package:camera/camera.dart';
 import 'dart:async';
 
 class CameraView extends StatefulWidget {
+  const CameraView({super.key});
+
   @override
   _CameraViewState createState() => _CameraViewState();
 }

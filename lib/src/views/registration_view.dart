@@ -148,10 +148,10 @@ class _RegistrationViewState extends State<RegistrationView> {
               onPressed: () => _register(context),
               child: Text(localizations?.translate('register') ?? 'Register'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               _errorMessage,
-              style: TextStyle(color: Colors.red),
+              style: const TextStyle(color: Colors.red),
               textAlign: TextAlign.center,
             ),
             TextButton(
@@ -179,7 +179,7 @@ class _RegistrationViewState extends State<RegistrationView> {
     }
 
     try {
-      String? _errorEmail = await _authController.register(
+      String? errorEmail = await _authController.register(
           _emailController.text, _passwordController.text);
       if (_authController.currentUser != null) {
         // Create a new user object
@@ -199,13 +199,13 @@ class _RegistrationViewState extends State<RegistrationView> {
         GoRouter.of(context).go('/home');
       } else {
         setState(() {
-          if (_errorEmail == "existing_email") {
+          if (errorEmail == "existing_email") {
             _errorMessage = localizations?.translate('existing_email') ??
                 'An account already exists for that email.';
           } else {
             _errorMessage = localizations?.translate('registration_failed') ??
                 'Registration failed. Please try again.';
-            print(_errorEmail);
+            print(errorEmail);
           }
         });
       }

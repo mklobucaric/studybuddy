@@ -3,7 +3,7 @@ import 'package:studybuddy/src/services/api_service.dart';
 import 'dart:io';
 
 class DocumentController with ChangeNotifier {
-  ApiService _apiService = ApiService();
+  final ApiService _apiService = ApiService();
   String? _uploadedDocumentUrl;
   bool _isUploading = false;
 

@@ -3,7 +3,7 @@ import 'package:studybuddy/src/models/question.dart';
 import 'package:studybuddy/src/services/api_service.dart';
 
 class QuestionController with ChangeNotifier {
-  ApiService _apiService = ApiService();
+  final ApiService _apiService = ApiService();
   List<Question> _questions = [];
   bool _isLoading = false;
 

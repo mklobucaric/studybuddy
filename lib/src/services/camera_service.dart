@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'dart:async';
-import 'dart:io';
 
 class CameraService {
   CameraController? _controller;

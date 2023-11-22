@@ -118,16 +118,16 @@ class _HomeViewState extends State<HomeView> {
             switch (index) {
               case 0:
                 return _buildInteractiveCard(
-                    context, 'take_photo', CameraView());
+                    context, 'take_photo', const CameraView());
               case 1:
                 return _buildInteractiveCard(
-                    context, 'pick_document', DocumentPickerView());
+                    context, 'pick_document', const DocumentPickerView());
               case 2:
                 return _buildInteractiveCard(
-                    context, 'questions', QuestionsView());
+                    context, 'questions', const QuestionsView());
               case 3:
                 return _buildInteractiveCard(
-                    context, 'submit_question', AskQuestionView());
+                    context, 'submit_question', const AskQuestionView());
               default:
                 return const Placeholder(); // Fallback placeholder
             }

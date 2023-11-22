@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:studybuddy/src/models/question.dart';
 
 class QuestionsView extends StatefulWidget {
+  const QuestionsView({super.key});
+
   @override
   _QuestionsViewState createState() => _QuestionsViewState();
 }
@@ -13,10 +15,10 @@ class _QuestionsViewState extends State<QuestionsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Questions'),
+        title: const Text('Questions'),
       ),
       body: questions.isEmpty
-          ? Center(child: Text('No questions available.'))
+          ? const Center(child: Text('No questions available.'))
           : ListView.builder(
               itemCount: questions.length,
               itemBuilder: (context, index) {
