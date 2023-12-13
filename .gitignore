@@ -18,7 +18,7 @@ test/
 lib/firebase_options.dart
 .metadata
 analysis_options.yaml
-chat_gpt_app.code-workspace
+studybuddy.code-workspace
 
 
 # If you're building an application, you may want to check-in your pubspec.lock

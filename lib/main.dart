@@ -9,6 +9,7 @@ import 'src/routing/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,16 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate(
+      // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
+      // argument for `webProvider`
+      webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+      // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
+      // your preferred provider. Choose from:
+      // 1. Debug provider
+      // 2. Safety Net provider
+      // 3. Play Integrity provider
+      androidProvider: AndroidProvider.debug);
   runApp(
     MultiProvider(
       providers: [

@@ -48,6 +48,7 @@ dependencies:
   go_router: ^12.1.1
   flutter_localizations:
     sdk: flutter
+  firebase_app_check: ^0.2.1+8
   
 
 dev_dependencies:

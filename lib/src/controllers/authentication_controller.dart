@@ -23,6 +23,15 @@ class AuthenticationController with ChangeNotifier {
     notifyListeners();
   }
 
+  void _checkCurrentUserJson() async {
+    var firebaseUser = _authService.currentUser; // This returns a Firebase User
+    if (firebaseUser != null) {
+      _currentUserJson = await _authService
+          .fetchUserData(firebaseUser.uid); // Fetching custom user data
+      notifyListeners();
+    }
+  }
+
   Future<String?> register(String email, String password) async {
     _isLoading = true;
     notifyListeners();
@@ -39,7 +48,7 @@ class AuthenticationController with ChangeNotifier {
     } catch (e) {
       // Handle registration error
       print('Registration Error: $e');
-      errorMessage = 'test';
+      errorMessage = 'Registration Error';
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -84,15 +93,6 @@ class AuthenticationController with ChangeNotifier {
       print('Google Sign-In Error: $e');
     } finally {
       _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  void _checkCurrentUserJson() async {
-    var firebaseUser = _authService.currentUser; // This returns a Firebase User
-    if (firebaseUser != null) {
-      _currentUserJson = await _authService
-          .fetchUserData(firebaseUser.uid); // Fetching custom user data
       notifyListeners();
     }
   }

@@ -23,7 +23,7 @@ class _CameraViewState extends State<CameraView> {
   Future<void> _initializeCamera() async {
     _cameras = await availableCameras();
     if (_cameras != null && _cameras!.isNotEmpty) {
-      _controller = CameraController(_cameras![0], ResolutionPreset.high);
+      _controller = CameraController(_cameras![0], ResolutionPreset.veryHigh);
       _controller!.initialize().then((_) {
         if (!mounted) {
           return;
@@ -45,7 +45,7 @@ class _CameraViewState extends State<CameraView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Take a Photo'),
+        title: const Text('Take a Photo of a Text'),
       ),
       body: _isCameraInitialized
           ? CameraPreview(_controller!)

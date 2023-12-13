@@ -28,7 +28,7 @@ class QuestionController with ChangeNotifier {
     }
   }
 
-  void submitAnswer(int questionId, String answer) {
+  void askAdditionalQuestions(int questionId, String answer) {
     // Implement the logic to handle user's answer submission
     // This could include sending the answer to the backend and updating the state
   }
