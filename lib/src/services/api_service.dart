@@ -10,7 +10,7 @@ class ApiService {
       'https://your-backend-api.com'; // Replace with your actual API URL
 
   // Function to upload documents
-  static Future<bool> uploadDocuments(String directoryPath) async {
+  Future<bool> uploadDocuments(String directoryPath) async {
     // Assuming directoryPath is the path to the directory containing the photos
     final uri = Uri.parse('https://your-api-endpoint/upload');
     var request = http.MultipartRequest('POST', uri);

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/services/camera_service.dart'; // Ensure this import points to the correct location of your CameraService
-import 'package:studybuddy/src/services/api_service.dart';
 import 'package:camera/camera.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:studybuddy/src/controllers/document_controller.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({super.key});
@@ -35,18 +37,42 @@ class _CameraViewState extends State<CameraView> {
       print('No photos directory path found.');
       return;
     }
-    // Call the ApiService to upload the photos
-    bool uploadSuccess = await ApiService.uploadDocuments(photosDirPath);
-    if (uploadSuccess) {
-      await _cameraService.clearPhotos();
-      // Here you would also update your state to reflect that the photos are cleared
-    } else {
-      // Handle upload failure (e.g., retry, show an error message)
-    }
+
+    final documentController =
+        Provider.of<DocumentController>(context, listen: false);
+
+    // Start the upload process
+    documentController.uploadDocument(photosDirPath);
+
+    // Use a local variable to store whether the widget is still mounted
+    bool isMounted = mounted;
+
+    // Check if the widget is still mounted before trying to use the context
+    documentController.addListener(() {
+      if (isMounted) {
+        if (documentController.isUploading == false) {
+          // If the upload is complete, navigate or update the UI
+          GoRouter.of(context)
+              .go('/questions_answers'); // Adjust the route as needed
+        }
+      }
+    });
+
+    // // Call the ApiService to upload the photos
+    // bool uploadSuccess = await _apiService.uploadDocuments(photosDirPath);
+    // if (uploadSuccess) {
+    //   await _cameraService.clearPhotos();
+    //   GoRouter.of(context)
+    //       .go('/questions_answers'); // Adjust the route as needed
+    //   // Here you would also update your state to reflect that the photos are cleared
+    // } else {
+    //   // Handle upload failure (e.g., retry, show an error message)
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
+    final documentController = Provider.of<DocumentController>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Take Photos'),
@@ -74,6 +100,8 @@ class _CameraViewState extends State<CameraView> {
               },
             ),
           ),
+          if (documentController.isUploading)
+            const LinearProgressIndicator(), // Shows a progress bar when uploading
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
