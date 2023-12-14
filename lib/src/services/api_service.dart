@@ -1,16 +1,39 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 
 class ApiService {
   final String _baseUrl =
       'https://your-backend-api.com'; // Replace with your actual API URL
 
   // Function to upload documents
-  Future<String> uploadDocument(String filePath) async {
-    // Implement the logic to upload a document
-    // Return the response from the backend (e.g., URL of the uploaded document)
-    return "test"; // only for test purpose
+  static Future<bool> uploadDocuments(String directoryPath) async {
+    // Assuming directoryPath is the path to the directory containing the photos
+    final uri = Uri.parse('https://your-api-endpoint/upload');
+    var request = http.MultipartRequest('POST', uri);
+
+    // Add files to the request
+    Directory(directoryPath).listSync().forEach((item) {
+      if (item is File) {
+        request.files.add(http.MultipartFile.fromBytes(
+          'files',
+          item.readAsBytesSync(),
+          filename: item.path.split("/").last,
+        ));
+      }
+    });
+
+    // Send the request to the server
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      // Handle the response, parse JSON, etc.
+      return true;
+    } else {
+      // Handle error
+      return false;
+    }
   }
 
   // Function to fetch questions based on the uploaded content
