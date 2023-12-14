@@ -1,4 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'package:studybuddy/src/models/qa_pairs_schema.dart';
+import 'package:studybuddy/src/services/local_storage_service.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -28,8 +30,23 @@ class ApiService {
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      // Handle the response, parse JSON, etc.
-      return true;
+      // Get the response body
+      final responseString = await response.stream.bytesToString();
+
+      // Parse the response body
+      final jsonResponse = json.decode(responseString);
+
+      // Convert JSON to QAPairsSchema object
+      QAPairsSchema qaPairsSchema = QAPairsSchema.fromJson(jsonResponse);
+
+      // Save the QAPairsSchema object locally
+      try {
+        await LocalStorageService().saveQAPairs(qaPairsSchema);
+        return true;
+      } catch (e) {
+        print('Error saving QA pairs: $e');
+        return false;
+      }
     } else {
       // Handle error
       return false;
