@@ -10,7 +10,7 @@ class ApiService {
       'https://your-backend-api.com'; // Replace with your actual API URL
 
   // Function to upload documents
-  Future<bool> uploadDocuments(String directoryPath) async {
+  Future<bool> uploadDocumentsFromDirectory(String directoryPath) async {
     // Assuming directoryPath is the path to the directory containing the photos
     final uri = Uri.parse('https://your-api-endpoint/upload');
     var request = http.MultipartRequest('POST', uri);
@@ -27,6 +27,45 @@ class ApiService {
     });
 
     // Send the request to the server
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      // Get the response body
+      final responseString = await response.stream.bytesToString();
+
+      // Parse the response body
+      final jsonResponse = json.decode(responseString);
+
+      // Convert JSON to QAPairsSchema object
+      QAPairsSchema qaPairsSchema = QAPairsSchema.fromJson(jsonResponse);
+
+      // Save the QAPairsSchema object locally
+      try {
+        await LocalStorageService().saveQAPairs(qaPairsSchema);
+        return true;
+      } catch (e) {
+        print('Error saving QA pairs: $e');
+        return false;
+      }
+    } else {
+      // Handle error
+      return false;
+    }
+  }
+
+  Future<bool> uploadDocuments(List<String> filePaths) async {
+    final uri = Uri.parse('$_baseUrl/upload');
+    var request = http.MultipartRequest('POST', uri);
+
+    for (var path in filePaths) {
+      File file = File(path);
+      request.files.add(await http.MultipartFile.fromPath(
+        'files',
+        file.path,
+        filename: file.path.split("/").last,
+      ));
+    }
+
     var response = await request.send();
 
     if (response.statusCode == 200) {

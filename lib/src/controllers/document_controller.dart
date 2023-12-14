@@ -12,7 +12,7 @@ class DocumentController with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _apiService.uploadDocuments(directoryPath);
+      await _apiService.uploadDocumentsFromDirectory(directoryPath);
       _isUploading = false;
       // Handle additional logic if needed after successful upload
     } catch (e) {
