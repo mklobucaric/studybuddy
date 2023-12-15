@@ -68,8 +68,16 @@ class _HomeViewState extends State<HomeView> {
         create: (context) => UploadState(),
         child: Scaffold(
           appBar: AppBar(
-            title: Text(localizations?.translate('title') ??
-                'Study Buddy'), // Localized title
+            title: InkWell(
+              onTap: () {
+                // Use go_router to navigate to HomeView
+                GoRouter.of(context).go('/home');
+              },
+              child: Text(localizations?.translate('title') ?? 'Study Buddy'),
+            ),
+
+            //Text(localizations?.translate('title') ??
+            //   'Study Buddy'), // Localized title
             actions: <Widget>[
               TextButton(
                 onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/services/api_service.dart';
+import 'package:go_router/go_router.dart';
 
 class AskCustomQuestionsView extends StatefulWidget {
   const AskCustomQuestionsView({Key? key}) : super(key: key);
@@ -48,7 +49,21 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Additional Questions')),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                // Use go_router to navigate to HomeView
+                GoRouter.of(context).go('/home');
+              },
+              child: const Text('Study Buddy'),
+            ),
+            const Text('Additional Questions')
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
