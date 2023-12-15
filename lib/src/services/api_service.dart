@@ -92,34 +92,60 @@ class ApiService {
     }
   }
 
-  // Function to fetch questions based on the uploaded content
-  Future<List<dynamic>> fetchQuestions(String documentUrl) async {
-    final response =
-        await http.get(Uri.parse('$_baseUrl/questions?doc=$documentUrl'));
+  Future<String> sendQuestionAndGetAnswer(
+      List<Map<String, String>> messages) async {
+    final uri = Uri.parse(
+        '$_baseUrl/your-endpoint'); // Replace with your actual endpoint
+    try {
+      var response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({'messages': messages}),
+      );
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to load questions');
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        // Assuming the backend returns the new answer as part of the response
+        // Adjust the below line according to your actual response structure
+        String newAnswer = data['new_answer'];
+        return newAnswer;
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      // Handle the error appropriately
+      throw Exception('Error sending question: $e');
     }
   }
 
-  // Function to submit a custom question
-  Future<String> submitQuestion(String question) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/submit-question'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode({'question': question}),
-    );
+  Future<String> sendCustomQuestionAndGetAnswer(
+      List<Map<String, String>> messages) async {
+    final uri = Uri.parse(
+        '$_baseUrl/your-endpoint'); // Replace with your actual endpoint
+    try {
+      var response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({'messages': messages}),
+      );
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body)['answer'];
-    } else {
-      throw Exception('Failed to submit question');
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        // Assuming the backend returns the new answer as part of the response
+        // Adjust the below line according to your actual response structure
+        String newAnswer = data['new_answer'];
+        return newAnswer;
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      // Handle the error appropriately
+      throw Exception('Error sending question: $e');
     }
   }
+}
+
+
 
   // Additional API methods as needed
-}
+

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/src/services/file_picker_service.dart'; // Update this with the actual path
-import 'package:studybuddy/src/states/upload_state.dart'; // Update this with the actual path
+import 'package:studybuddy/src/services/file_picker_service.dart';
+import 'package:studybuddy/src/states/upload_state.dart';
+import 'package:go_router/go_router.dart';
 
 class DocumentPickerView extends StatefulWidget {
   const DocumentPickerView({super.key});
@@ -11,7 +12,7 @@ class DocumentPickerView extends StatefulWidget {
 }
 
 class _DocumentPickerViewState extends State<DocumentPickerView> {
-  List<String>? _pickedFileNames;
+  List<String>? _pickedFilePaths; // Store file paths instead of just names
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +20,42 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
       appBar: AppBar(
         title: const Text('Pick Documents'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: _pickDocuments,
-              child: const Text('Select Documents'),
-            ),
-            ElevatedButton(
-              onPressed: _uploadDocuments,
-              child: const Text('Upload Documents'),
-            ),
-            const SizedBox(height: 20),
-            _buildFileList(),
-          ],
-        ),
+      body: Selector<UploadState, bool>(
+        selector: (_, uploadState) => uploadState.isUploading,
+        builder: (context, isUploading, _) {
+          return Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: _pickDocuments,
+                      child: const Text('Select Documents'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _uploadDocuments,
+                      child: const Text('Upload Documents'),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildFileList(),
+                  ],
+                ),
+              ),
+              if (isUploading) const LinearProgressIndicator(),
+            ],
+          );
+        },
       ),
     );
   }
 
   Widget _buildFileList() {
-    if (_pickedFileNames != null) {
+    if (_pickedFilePaths != null) {
       return Column(
-        children: _pickedFileNames!.map((name) => Text(name)).toList(),
+        children: _pickedFilePaths!
+            .map((path) => Text(path.split('/').last))
+            .toList(),
       );
     } else {
       return const Text('No files selected.');
@@ -56,17 +69,23 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
 
     if (results != null) {
       setState(() {
-        _pickedFileNames = results.files.map((file) => file.name).toList();
+        _pickedFilePaths =
+            results.files.map((file) => file.path).cast<String>().toList();
       });
     }
   }
 
   Future<void> _uploadDocuments() async {
     final uploadState = Provider.of<UploadState>(context, listen: false);
-    if (_pickedFileNames != null) {
-      // Implement logic to get the directory path of selected files
-      String directoryPath = 'path_to_directory'; // Update this
-      await uploadState.uploadDocuments(directoryPath);
+    if (_pickedFilePaths != null) {
+      await uploadState.uploadDocuments(_pickedFilePaths!);
+
+      // If the widget is still mounted and upload is complete, navigate to another view
+      if (!mounted) return;
+      if (!uploadState.isUploading) {
+        GoRouter.of(context)
+            .go('/next_route'); // Replace '/next_route' with your desired route
+      }
     }
   }
 }
