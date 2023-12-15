@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/services/api_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:studybuddy/src/utils/localization.dart';
 
 class AskCustomQuestionsView extends StatefulWidget {
   const AskCustomQuestionsView({Key? key}) : super(key: key);
@@ -48,6 +49,8 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
 
   @override
   Widget build(BuildContext context) {
+    // Using AppLocalizations to get localized strings
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -60,7 +63,8 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
               },
               child: const Text('Study Buddy'),
             ),
-            const Text('Additional Questions')
+            Text(localizations?.translate('customquestionsTitle') ??
+                'Custom Questions')
           ],
         ),
       ),
@@ -85,7 +89,8 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
             child: TextField(
               controller: _questionController,
               decoration: InputDecoration(
-                labelText: 'Ask a question',
+                labelText: localizations?.translate('askQuestionLabel') ??
+                    'Ask a question',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: _sendQuestion,

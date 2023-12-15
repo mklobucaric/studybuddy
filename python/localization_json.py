@@ -37,12 +37,12 @@ def update_json_files(keys: List[str], json_file_paths: List[str]):
                 file.truncate()  # Truncate file to new length
 
 # Example usage
-lib_directory_path = 'path_to_your_lib_directory'  # Replace with the path to your 'lib' directory
+lib_directory_path = 'D:/Work/studybuddy/lib'  # Replace with the path to your 'lib' directory
 json_file_paths = [
-    'path_to_en.json',
-    'path_to_de.json',
-    'path_to_hr.json',
-    'path_to_hu.json'
+    'D:/Work/studybuddy/assets/lang/en.json',
+    'D:/Work/studybuddy/assets/lang/de.json',
+    'D:/Work/studybuddy/assets/lang/hr.json',
+    'D:/Work/studybuddy/assets/lang/hu.json'
 ]  # Replace with the paths to your JSON localization files
 
 # Extract keys from all .dart files in the 'lib' directory
@@ -50,3 +50,6 @@ localization_keys = extract_localization_keys_from_directory(lib_directory_path)
 
 # Update JSON files
 update_json_files(localization_keys, json_file_paths)
+if __name__ == "__main__":
+    localization_keys = extract_localization_keys_from_directory(lib_directory_path)
+    update_json_files(localization_keys, json_file_paths)

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/src/controllers/document_controller.dart';
 import 'package:studybuddy/src/states/upload_state.dart';
+import 'package:studybuddy/src/utils/localization.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({super.key});
@@ -63,9 +64,23 @@ class _CameraViewState extends State<CameraView> {
   @override
   Widget build(BuildContext context) {
     final documentController = Provider.of<DocumentController>(context);
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Take Photos'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                // Use go_router to navigate to HomeView
+                GoRouter.of(context).go('/home');
+              },
+              child: const Text('Study Buddy'),
+            ),
+            Text(localizations?.translate('pickDocumentsTitle') ??
+                'Pick Documents')
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -81,7 +96,9 @@ class _CameraViewState extends State<CameraView> {
                   if (_cameraService.controller != null) {
                     return CameraPreview(_cameraService.controller!);
                   } else {
-                    return Text("Camera not available");
+                    return Text(
+                        localizations?.translate('cameraNotAvailable') ??
+                            'Camera not available');
                   }
                 } else {
                   // Otherwise, display a loading indicator
@@ -98,13 +115,13 @@ class _CameraViewState extends State<CameraView> {
               FloatingActionButton(
                 onPressed: _takePicture,
                 tooltip: 'Take Photo',
-                child: Icon(Icons.camera_alt),
+                child: const Icon(Icons.camera_alt),
               ),
               const SizedBox(width: 20),
               FloatingActionButton(
                 onPressed: _uploadAndClear,
                 tooltip: 'Upload Photos',
-                child: Icon(Icons.cloud_upload),
+                child: const Icon(Icons.cloud_upload),
               ),
             ],
           ),

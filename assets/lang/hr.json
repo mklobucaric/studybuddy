@@ -21,16 +21,24 @@
     "ask_question_hint": "Upišite svoje pitanje ovdje...",
     "submit": "Pošalji",
     "cancel": "Otkaži",
-    "login_Google" : "Prijavite se s Googleom",
-    "create_account" : "Nemate račun? Registrirajte se",
-    "first_name" : "Ime",
-    "last_name" : "Prezime",
-    "have_account" : "Već imate račun? Prijavite se",
-    "valid_email" : "Molim Vas unesite valjanu e-mail adresu!",
-    "valid_password" : "Molim Vas unesite valjanu lozinku!", 
-    "password_dont_match" : "Lozinke se ne podudaraju.",
-    "registration_failed" : "Registracija nije uspjela. Molim Vas pokušajte ponovo.",
-    "existing_email" : "Već postoji račun za tu e-mail adresu."
-
-  }
-  
+    "login_Google": "Prijavite se s Googleom",
+    "create_account": "Nemate račun? Registrirajte se",
+    "first_name": "Ime",
+    "last_name": "Prezime",
+    "have_account": "Već imate račun? Prijavite se",
+    "valid_email": "Molim Vas unesite valjanu e-mail adresu!",
+    "valid_password": "Molim Vas unesite valjanu lozinku!",
+    "password_dont_match": "Lozinke se ne podudaraju.",
+    "registration_failed": "Registracija nije uspjela. Molim Vas pokušajte ponovo.",
+    "existing_email": "Već postoji račun za tu e-mail adresu.",
+    "askQuestionLabel": "Postavi pitanje",
+    "noFilesSelected": "Nisu odabrane datoteke",
+    "questionsTitle": "Pitanja",
+    "customquestionsTitle": "Prilagođena pitanja",
+    "selectDocuments": "Dodatna pitanja",
+    "pickDocumentsTitle": "Odaberite dokumente",
+    "askFollowUpQuestionLabel": "Postavite slijedeće pitanje.",
+    "uploadDocuments": "Pošaljite dokumente",
+    "additionalquestionsTitle": "Dodatna pitanja",
+    "cameraNotAvailable": "Kamera nije dostupna"
+}

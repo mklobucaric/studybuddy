@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:studybuddy/src/services/file_picker_service.dart';
 import 'package:studybuddy/src/states/upload_state.dart';
 import 'package:go_router/go_router.dart';
+import 'package:studybuddy/src/utils/localization.dart';
 
 class DocumentPickerView extends StatefulWidget {
   const DocumentPickerView({super.key});
@@ -16,9 +17,23 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pick Documents'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                // Use go_router to navigate to HomeView
+                GoRouter.of(context).go('/home');
+              },
+              child: const Text('Study Buddy'),
+            ),
+            Text(localizations?.translate('pickDocumentsTitle') ??
+                'Pick Documents')
+          ],
+        ),
       ),
       body: Selector<UploadState, bool>(
         selector: (_, uploadState) => uploadState.isUploading,
@@ -31,11 +46,13 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
                   children: <Widget>[
                     ElevatedButton(
                       onPressed: _pickDocuments,
-                      child: const Text('Select Documents'),
+                      child: Text(localizations?.translate('selectDocuments') ??
+                          'Select Documents'),
                     ),
                     ElevatedButton(
                       onPressed: _uploadDocuments,
-                      child: const Text('Upload Documents'),
+                      child: Text(localizations?.translate('uploadDocuments') ??
+                          'Upload Documents'),
                     ),
                     const SizedBox(height: 20),
                     _buildFileList(),
@@ -51,6 +68,7 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
   }
 
   Widget _buildFileList() {
+    var localizations = AppLocalizations.of(context);
     if (_pickedFilePaths != null) {
       return Column(
         children: _pickedFilePaths!
@@ -58,7 +76,8 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
             .toList(),
       );
     } else {
-      return const Text('No files selected.');
+      return Text(
+          localizations?.translate('noFilesSelected') ?? 'No files selected.');
     }
   }
 
@@ -83,8 +102,8 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
       // If the widget is still mounted and upload is complete, navigate to another view
       if (!mounted) return;
       if (!uploadState.isUploading) {
-        GoRouter.of(context)
-            .go('/next_route'); // Replace '/next_route' with your desired route
+        GoRouter.of(context).go(
+            '/questions_answers'); // Replace '/next_route' with your desired route
       }
     }
   }

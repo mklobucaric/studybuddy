@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/views/additional_questions_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:studybuddy/src/utils/localization.dart';
 
 class QuestionsView extends StatefulWidget {
   const QuestionsView({super.key});
@@ -35,15 +37,32 @@ class _QuestionsViewState extends State<QuestionsView> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     if (isLoading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Questions')),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () {
+                  // Use go_router to navigate to HomeView
+                  GoRouter.of(context).go('/home');
+                },
+                child: const Text('Study Buddy'),
+              ),
+              Text(localizations?.translate('questionsTitle') ?? 'Questions')
+            ],
+          ),
+        ),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Questions')),
+      appBar: AppBar(
+          title:
+              Text(localizations?.translate('questionsTitle') ?? 'Questions')),
       body: Column(
         children: [
           Padding(

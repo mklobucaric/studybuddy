@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/api_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:studybuddy/src/utils/localization.dart';
 
 class AdditionalQuestionsView extends StatefulWidget {
   final QAPair initialQAPair;
@@ -62,8 +64,24 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
 
   @override
   Widget build(BuildContext context) {
+    var localizations = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Additional Questions')),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                // Use go_router to navigate to HomeView
+                GoRouter.of(context).go('/home');
+              },
+              child: const Text('Study Buddy'),
+            ),
+            Text(localizations?.translate('additionalquestionsTitle') ??
+                'Additional Questions')
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -85,7 +103,9 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
             child: TextField(
               controller: _questionController,
               decoration: InputDecoration(
-                labelText: 'Ask a question',
+                labelText:
+                    localizations?.translate('askFollowUpQuestionLabel') ??
+                        'Ask a follow up question',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: _sendQuestion,
