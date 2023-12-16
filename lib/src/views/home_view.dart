@@ -75,9 +75,6 @@ class _HomeViewState extends State<HomeView> {
               },
               child: Text(localizations?.translate('title') ?? 'Study Buddy'),
             ),
-
-            //Text(localizations?.translate('title') ??
-            //   'Study Buddy'), // Localized title
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -222,6 +219,8 @@ class _HomeViewState extends State<HomeView> {
       setState(() => _isLoading = false);
     }
   }
+}
+
 
   // Widget _buildInteractiveCard(
   //     BuildContext context, String label, Widget destination) {
@@ -262,4 +261,4 @@ class _HomeViewState extends State<HomeView> {
   //     ),
   //   );
   // }
-}
+

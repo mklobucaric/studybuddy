@@ -4,6 +4,7 @@ import 'package:studybuddy/src/services/file_picker_service.dart';
 import 'package:studybuddy/src/states/upload_state.dart';
 import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
 
 class DocumentPickerView extends StatefulWidget {
   const DocumentPickerView({super.key});
@@ -18,6 +19,7 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -50,7 +52,8 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
                           'Select Documents'),
                     ),
                     ElevatedButton(
-                      onPressed: _uploadDocuments,
+                      onPressed: () => _uploadDocuments(
+                          context, localeProvider.currentLocale.languageCode),
                       child: Text(localizations?.translate('uploadDocuments') ??
                           'Upload Documents'),
                     ),
@@ -94,10 +97,10 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
     }
   }
 
-  Future<void> _uploadDocuments() async {
+  Future<void> _uploadDocuments(context, String languageCode) async {
     final uploadState = Provider.of<UploadState>(context, listen: false);
     if (_pickedFilePaths != null) {
-      await uploadState.uploadDocuments(_pickedFilePaths!);
+      await uploadState.uploadDocuments(_pickedFilePaths!, languageCode);
 
       // If the widget is still mounted and upload is complete, navigate to another view
       if (!mounted) return;

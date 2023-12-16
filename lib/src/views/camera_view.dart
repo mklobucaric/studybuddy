@@ -3,9 +3,9 @@ import 'package:studybuddy/src/services/camera_service.dart'; // Ensure this imp
 import 'package:camera/camera.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:studybuddy/src/controllers/document_controller.dart';
 import 'package:studybuddy/src/states/upload_state.dart';
 import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({super.key});
@@ -28,7 +28,7 @@ class _CameraViewState extends State<CameraView> {
     // Optionally, update your state to show a thumbnail of the picture
   }
 
-  Future<void> _uploadAndClear() async {
+  Future<void> _uploadAndClear(context, String languageCode) async {
     final uploadState = Provider.of<UploadState>(context, listen: false);
     await _cameraService.savePhotosToDirectory();
 
@@ -39,7 +39,7 @@ class _CameraViewState extends State<CameraView> {
       return;
     }
 
-    await uploadState.uploadDocumentsFromDirectory(photosDirPath);
+    await uploadState.uploadDocumentsFromDirectory(photosDirPath, languageCode);
     await _cameraService.clearPhotos();
 
     // Check if the widget is still mounted before using the context
@@ -63,8 +63,9 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    final documentController = Provider.of<DocumentController>(context);
+    final uploadState = Provider.of<UploadState>(context, listen: false);
     var localizations = AppLocalizations.of(context);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -102,12 +103,12 @@ class _CameraViewState extends State<CameraView> {
                   }
                 } else {
                   // Otherwise, display a loading indicator
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             ),
           ),
-          if (documentController.isUploading)
+          if (uploadState.isUploading)
             const LinearProgressIndicator(), // Shows a progress bar when uploading
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +120,8 @@ class _CameraViewState extends State<CameraView> {
               ),
               const SizedBox(width: 20),
               FloatingActionButton(
-                onPressed: _uploadAndClear,
+                onPressed: () => _uploadAndClear(
+                    context, localeProvider.currentLocale.languageCode),
                 tooltip: 'Upload Photos',
                 child: const Icon(Icons.cloud_upload),
               ),

@@ -3,6 +3,8 @@ import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/api_service.dart';
 import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 class AdditionalQuestionsView extends StatefulWidget {
   final QAPair initialQAPair;
@@ -36,7 +38,7 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
     });
   }
 
-  Future<void> _sendQuestion() async {
+  Future<void> _sendQuestion(context, String languageCode) async {
     final userQuestion = _questionController.text;
     if (userQuestion.isEmpty) return;
 
@@ -47,7 +49,7 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
 
     try {
       final assistantAnswer =
-          await _apiService.sendQuestionAndGetAnswer(messages);
+          await _apiService.sendQuestionAndGetAnswer(messages, languageCode);
       setState(() {
         messages.add({"role": "assistant", "content": assistantAnswer});
       });
@@ -65,6 +67,7 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
   @override
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -108,10 +111,12 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
                         'Ask a follow up question',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.send),
-                  onPressed: _sendQuestion,
+                  onPressed: () => _sendQuestion(
+                      context, localeProvider.currentLocale.languageCode),
                 ),
               ),
-              onSubmitted: (_) => _sendQuestion(),
+              onSubmitted: (_) => _sendQuestion(
+                  context, localeProvider.currentLocale.languageCode),
             ),
           ),
         ],

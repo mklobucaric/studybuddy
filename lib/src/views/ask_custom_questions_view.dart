@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:studybuddy/src/services/api_service.dart';
 import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 class AskCustomQuestionsView extends StatefulWidget {
   const AskCustomQuestionsView({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
     super.initState();
   }
 
-  Future<void> _sendQuestion() async {
+  Future<void> _sendQuestion(context, String languageCode) async {
     final userQuestion = _questionController.text;
     if (userQuestion.isEmpty) return;
 
@@ -31,8 +33,8 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
     });
 
     try {
-      final assistantAnswer =
-          await _apiService.sendCustomQuestionAndGetAnswer(messages);
+      final assistantAnswer = await _apiService.sendCustomQuestionAndGetAnswer(
+          messages, languageCode);
       setState(() {
         messages.add({"role": "assistant", "content": assistantAnswer});
       });
@@ -51,6 +53,7 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
   Widget build(BuildContext context) {
     // Using AppLocalizations to get localized strings
     var localizations = AppLocalizations.of(context);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -93,10 +96,12 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
                     'Ask a question',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.send),
-                  onPressed: _sendQuestion,
+                  onPressed: () => _sendQuestion(
+                      context, localeProvider.currentLocale.languageCode),
                 ),
               ),
-              onSubmitted: (_) => _sendQuestion(),
+              onSubmitted: (_) => _sendQuestion(
+                  context, localeProvider.currentLocale.languageCode),
             ),
           ),
         ],

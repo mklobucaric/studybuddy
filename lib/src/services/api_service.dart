@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
+import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -10,10 +11,16 @@ class ApiService {
       'https://your-backend-api.com'; // Replace with your actual API URL
 
   // Function to upload documents
-  Future<bool> uploadDocumentsFromDirectory(String directoryPath) async {
+  Future<bool> uploadDocumentsFromDirectory(
+      String directoryPath, String languageCode) async {
     // Assuming directoryPath is the path to the directory containing the photos
     final uri = Uri.parse('https://your-api-endpoint/upload');
+
     var request = http.MultipartRequest('POST', uri);
+    // Use the current locale from LocaleProvider
+    request.headers.addAll({
+      'Accept-Language': languageCode,
+    });
 
     // Add files to the request
     Directory(directoryPath).listSync().forEach((item) {
@@ -53,9 +60,13 @@ class ApiService {
     }
   }
 
-  Future<bool> uploadDocuments(List<String> filePaths) async {
+  Future<bool> uploadDocuments(
+      List<String> filePaths, String languageCode) async {
     final uri = Uri.parse('$_baseUrl/upload');
     var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Accept-Language': languageCode,
+    });
 
     for (var path in filePaths) {
       File file = File(path);
@@ -93,13 +104,16 @@ class ApiService {
   }
 
   Future<String> sendQuestionAndGetAnswer(
-      List<Map<String, String>> messages) async {
+      List<Map<String, String>> messages, String languageCode) async {
     final uri = Uri.parse(
         '$_baseUrl/your-endpoint'); // Replace with your actual endpoint
     try {
       var response = await http.post(
         uri,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": languageCode
+        },
         body: json.encode({'messages': messages}),
       );
 
@@ -119,13 +133,16 @@ class ApiService {
   }
 
   Future<String> sendCustomQuestionAndGetAnswer(
-      List<Map<String, String>> messages) async {
+      List<Map<String, String>> messages, String languageCode) async {
     final uri = Uri.parse(
         '$_baseUrl/your-endpoint'); // Replace with your actual endpoint
     try {
       var response = await http.post(
         uri,
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": languageCode
+        },
         body: json.encode({'messages': messages}),
       );
 

@@ -15,7 +15,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthenticationController _authController = AuthenticationController();
   String _errorMessage = '';
 
   @override
@@ -121,14 +120,17 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<void> _login(BuildContext context) async {
+    var authController =
+        Provider.of<AuthenticationController>(context, listen: false);
+
     setState(() {
       _errorMessage = '';
     });
 
     try {
-      await _authController.login(
+      await authController.login(
           _emailController.text, _passwordController.text);
-      if (_authController.currentUser != null) {
+      if (authController.currentUser != null) {
         // Navigate to the home screen or another appropriate screen
         if (!mounted) return;
         GoRouter.of(context).go('/home');
@@ -145,13 +147,16 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<void> _loginWithGoogle(BuildContext context) async {
+    var authController =
+        Provider.of<AuthenticationController>(context, listen: false);
+
     setState(() {
       _errorMessage = '';
     });
 
     try {
-      await _authController.signInWithGoogle();
-      if (_authController.currentUser != null) {
+      await authController.signInWithGoogle();
+      if (authController.currentUser != null) {
         // Navigate to the home screen or another appropriate screen
         if (!mounted) return;
         GoRouter.of(context).go('/home');

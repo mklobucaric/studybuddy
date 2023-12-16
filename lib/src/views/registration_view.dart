@@ -22,7 +22,6 @@ class _RegistrationViewState extends State<RegistrationView> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final AuthenticationController _authController = AuthenticationController();
   String _errorMessage = '';
 
   @override
@@ -167,6 +166,9 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   void _register(BuildContext context) async {
     var localizations = AppLocalizations.of(context);
+    var authController =
+        Provider.of<AuthenticationController>(context, listen: false);
+
     setState(() {
       _errorMessage = '';
     });
@@ -179,12 +181,12 @@ class _RegistrationViewState extends State<RegistrationView> {
     }
 
     try {
-      String? errorEmail = await _authController.register(
+      String? errorEmail = await authController.register(
           _emailController.text, _passwordController.text);
-      if (_authController.currentUser != null) {
+      if (authController.currentUser != null) {
         // Create a new user object
         UserJson user = UserJson(
-          id: _authController.currentUser!.uid,
+          id: authController.currentUser!.uid,
           firstName: _firstNameController.text,
           lastName: _lastNameController.text,
           email: _emailController.text,

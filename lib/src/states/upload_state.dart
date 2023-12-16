@@ -7,13 +7,14 @@ class UploadState with ChangeNotifier {
 
   bool get isUploading => _isUploading;
 
-  Future<void> uploadDocumentsFromDirectory(String directoryPath) async {
+  Future<void> uploadDocumentsFromDirectory(
+      String directoryPath, String languageCode) async {
     _isUploading = true;
     notifyListeners();
 
     try {
-      bool success =
-          await _apiService.uploadDocumentsFromDirectory(directoryPath);
+      bool success = await _apiService.uploadDocumentsFromDirectory(
+          directoryPath, languageCode);
       if (success) {
         // Additional logic if needed after successful upload
       } else {
@@ -27,12 +28,13 @@ class UploadState with ChangeNotifier {
     }
   }
 
-  Future<void> uploadDocuments(List<String> filePaths) async {
+  Future<void> uploadDocuments(
+      List<String> filePaths, String languageCode) async {
     _isUploading = true;
     notifyListeners();
 
     try {
-      bool success = await _apiService.uploadDocuments(filePaths);
+      bool success = await _apiService.uploadDocuments(filePaths, languageCode);
       if (success) {
         // Handle successful upload
       } else {
