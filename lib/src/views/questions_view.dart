@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
-import 'package:studybuddy/src/views/additional_questions_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/localization.dart';
+import 'package:studybuddy/src/services/local_storage_service.dart';
 
 class QuestionsView extends StatefulWidget {
   const QuestionsView({super.key});
@@ -15,7 +15,7 @@ class QuestionsView extends StatefulWidget {
 }
 
 class _QuestionsViewState extends State<QuestionsView> {
-  QAPairsSchema? qaPairsSchema;
+  QAContent? qaContent;
   bool isLoading = true;
   int? expandedQuestionIndex;
 
@@ -26,13 +26,19 @@ class _QuestionsViewState extends State<QuestionsView> {
   }
 
   Future<void> _loadQAPairs() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/qa_pairs.json');
-    final String content = await file.readAsString();
-    setState(() {
-      qaPairsSchema = QAPairsSchema.fromJson(json.decode(content));
-      isLoading = false;
-    });
+    try {
+      var loadedQAContent = await LocalStorageService().loadQAPairs();
+      setState(() {
+        qaContent = loadedQAContent;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        // Handle error or set an error flag to display an error message
+      });
+      print('Error loading QA pairs: $e');
+    }
   }
 
   @override
@@ -68,19 +74,26 @@ class _QuestionsViewState extends State<QuestionsView> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              qaPairsSchema!.topic,
+              qaContent!.date,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(qaPairsSchema!.briefSummary),
+            child: Text(
+              qaContent!.topic,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(qaContent!.briefSummary),
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: qaPairsSchema!.qaPairs.length,
+              itemCount: qaContent!.qaPairs.length,
               itemBuilder: (context, index) {
-                return _buildQuestionItem(qaPairsSchema!.qaPairs[index], index);
+                return _buildQuestionItem(qaContent!.qaPairs[index], index);
               },
             ),
           ),
@@ -105,13 +118,8 @@ class _QuestionsViewState extends State<QuestionsView> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AdditionalQuestionsView(initialQAPair: qaPair),
-                  ),
-                ),
+                onTap: () =>
+                    context.push('/additionalQuestions', extra: qaPair),
                 child: Text(qaPair.answer),
               ),
             ),

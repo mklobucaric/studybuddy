@@ -46,7 +46,7 @@ class _CameraViewState extends State<CameraView> {
     if (!mounted) return;
 
     if (uploadState.isUploading == false) {
-      GoRouter.of(context).go('/questions_answers');
+      GoRouter.of(context).go('/questionsAnswers');
     }
   }
 
@@ -55,7 +55,7 @@ class _CameraViewState extends State<CameraView> {
   // if (uploadSuccess) {
   //   await _cameraService.clearPhotos();
   //   GoRouter.of(context)
-  //       .go('/questions_answers'); // Adjust the route as needed
+  //       .go('/questionsAnswers'); // Adjust the route as needed
   //   // Here you would also update your state to reflect that the photos are cleared
   // } else {
   //   // Handle upload failure (e.g., retry, show an error message)

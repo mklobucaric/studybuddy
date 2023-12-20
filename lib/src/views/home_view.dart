@@ -154,18 +154,17 @@ class _HomeViewState extends State<HomeView> {
                 switch (index) {
                   case 0:
                     return const InteractiveCard(
-                        label: 'take_photo', destination: CameraView());
+                        label: 'take_photo', destination: '/camera');
                   case 1:
                     return const InteractiveCard(
-                        label: 'pick_document',
-                        destination: DocumentPickerView());
+                        label: 'pick_document', destination: '/pickDocuments');
                   case 2:
                     return const InteractiveCard(
-                        label: 'questions', destination: QuestionsView());
+                        label: 'questions', destination: '/questionsAnswers');
                   case 3:
                     return const InteractiveCard(
                         label: 'submit_question',
-                        destination: AskCustomQuestionsView());
+                        destination: '/customQuestions');
                   default:
                     return const Placeholder(); // Fallback placeholder
                 }
@@ -198,7 +197,7 @@ class _HomeViewState extends State<HomeView> {
     setState(() => _isLoading = true);
     try {
       var qaDoc = await _firestore
-          .collection('questions_answers')
+          .collection('questionsAnswers')
           .doc(item.qaReference)
           .get();
       if (qaDoc.exists) {

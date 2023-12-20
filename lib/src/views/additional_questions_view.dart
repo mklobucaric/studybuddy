@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:studybuddy/src/services/local_storage_service.dart';
 
 class AdditionalQuestionsView extends StatefulWidget {
   final QAPair initialQAPair;
@@ -21,21 +22,39 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
   final _apiService = ApiService();
   final TextEditingController _questionController = TextEditingController();
   List<Map<String, String>> messages = [];
+  QAContent? qaContent;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _initializeMessages();
+    _loadQAPairs();
   }
 
   void _initializeMessages() {
     setState(() {
       messages = [
         {"role": "user", "content": widget.initialQAPair.question},
-        {"role": "assistant", "content": widget.initialQAPair.answer},
+        {"role": "assistant", "content": widget.initialQAPair.answer}
       ];
     });
+  }
+
+  Future<void> _loadQAPairs() async {
+    try {
+      var loadedQAContent = await LocalStorageService().loadQAPairs();
+      setState(() {
+        qaContent = loadedQAContent;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        // Handle error or set an error flag to display an error message
+      });
+      print('Error loading QA pairs: $e');
+    }
   }
 
   Future<void> _sendQuestion(context, String languageCode) async {
@@ -44,12 +63,11 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
 
     setState(() {
       _isLoading = true;
-      messages.add({"role": "user", "content": userQuestion});
     });
 
     try {
-      final assistantAnswer =
-          await _apiService.sendQuestionAndGetAnswer(messages, languageCode);
+      final assistantAnswer = await _apiService.sendQuestionAndGetAnswer(
+          messages, languageCode, qaContent!, userQuestion);
       setState(() {
         messages.add({"role": "assistant", "content": assistantAnswer});
       });

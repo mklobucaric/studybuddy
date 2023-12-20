@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
-import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -14,12 +14,20 @@ class ApiService {
   Future<bool> uploadDocumentsFromDirectory(
       String directoryPath, String languageCode) async {
     // Assuming directoryPath is the path to the directory containing the photos
-    final uri = Uri.parse('https://your-api-endpoint/upload');
+    final uri = Uri.parse('$_baseUrl/api/upload');
+    String? firebaseToken =
+        await FirebaseAuth.instance.currentUser?.getIdToken();
 
+    if (firebaseToken == null) {
+      // Handle the case when token is null
+      // For example: throw an error, or return early
+      throw Exception('Firebase token is null');
+    }
     var request = http.MultipartRequest('POST', uri);
     // Use the current locale from LocaleProvider
     request.headers.addAll({
       'Accept-Language': languageCode,
+      'Authorization': 'Bearer $firebaseToken'
     });
 
     // Add files to the request
@@ -43,12 +51,12 @@ class ApiService {
       // Parse the response body
       final jsonResponse = json.decode(responseString);
 
-      // Convert JSON to QAPairsSchema object
-      QAPairsSchema qaPairsSchema = QAPairsSchema.fromJson(jsonResponse);
+      // Convert JSON to QAContent object
+      QAContent qaContent = QAContent.fromJson(jsonResponse);
 
-      // Save the QAPairsSchema object locally
+      // Save the QAContent object locally
       try {
-        await LocalStorageService().saveQAPairs(qaPairsSchema);
+        await LocalStorageService().saveQAPairs(qaContent);
         return true;
       } catch (e) {
         print('Error saving QA pairs: $e');
@@ -62,10 +70,20 @@ class ApiService {
 
   Future<bool> uploadDocuments(
       List<String> filePaths, String languageCode) async {
-    final uri = Uri.parse('$_baseUrl/upload');
+    final uri = Uri.parse('$_baseUrl/api/upload');
+    String? firebaseToken =
+        await FirebaseAuth.instance.currentUser?.getIdToken();
+
+    if (firebaseToken == null) {
+      // Handle the case when token is null
+      // For example: throw an error, or return early
+      throw Exception('Firebase token is null');
+    }
+
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'Accept-Language': languageCode,
+      'Authorization': 'Bearer $firebaseToken'
     });
 
     for (var path in filePaths) {
@@ -86,12 +104,12 @@ class ApiService {
       // Parse the response body
       final jsonResponse = json.decode(responseString);
 
-      // Convert JSON to QAPairsSchema object
-      QAPairsSchema qaPairsSchema = QAPairsSchema.fromJson(jsonResponse);
+      // Convert JSON to QAContent object
+      QAContent qaContent = QAContent.fromJson(jsonResponse);
 
-      // Save the QAPairsSchema object locally
+      // Save the QAContent object locally
       try {
-        await LocalStorageService().saveQAPairs(qaPairsSchema);
+        await LocalStorageService().saveQAPairs(qaContent);
         return true;
       } catch (e) {
         print('Error saving QA pairs: $e');
@@ -103,18 +121,36 @@ class ApiService {
     }
   }
 
-  Future<String> sendQuestionAndGetAnswer(
-      List<Map<String, String>> messages, String languageCode) async {
+  Future<String> sendQuestionAndGetAnswer(List<Map<String, String>> messages,
+      String languageCode, QAContent qaContent, String question) async {
     final uri = Uri.parse(
-        '$_baseUrl/your-endpoint'); // Replace with your actual endpoint
+        '$_baseUrl/api/question'); // Replace with your actual endpoint
+
+    String? firebaseToken =
+        await FirebaseAuth.instance.currentUser?.getIdToken();
+
+    if (firebaseToken == null) {
+      // Handle the case when token is null
+      // For example: throw an error, or return early
+      throw Exception('Firebase token is null');
+    }
     try {
       var response = await http.post(
         uri,
         headers: {
           "Content-Type": "application/json",
-          "Accept-Language": languageCode
+          "Accept-Language": languageCode,
+          "Authorization": "Bearer $firebaseToken"
         },
-        body: json.encode({'messages': messages}),
+        body: json.encode(
+          {
+            'date': qaContent.date,
+            'topic': qaContent.topic,
+            'brief_summary': qaContent.briefSummary,
+            'question': question,
+            'messages': messages
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -135,13 +171,23 @@ class ApiService {
   Future<String> sendCustomQuestionAndGetAnswer(
       List<Map<String, String>> messages, String languageCode) async {
     final uri = Uri.parse(
-        '$_baseUrl/your-endpoint'); // Replace with your actual endpoint
+        '$_baseUrl/api/custom_question'); // Replace with your actual endpoint
+
+    String? firebaseToken =
+        await FirebaseAuth.instance.currentUser?.getIdToken();
+
+    if (firebaseToken == null) {
+      // Handle the case when token is null
+      // For example: throw an error, or return early
+      throw Exception('Firebase token is null');
+    }
     try {
       var response = await http.post(
         uri,
         headers: {
           "Content-Type": "application/json",
-          "Accept-Language": languageCode
+          "Accept-Language": languageCode,
+          "Authorization": "Bearer $firebaseToken"
         },
         body: json.encode({'messages': messages}),
       );

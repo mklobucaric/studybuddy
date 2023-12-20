@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/utils/localization.dart';
+import 'package:go_router/go_router.dart';
 
 class InteractiveCard extends StatelessWidget {
   final String label;
-  final Widget destination;
+  final String destination;
 
   const InteractiveCard({
     Key? key,
@@ -19,10 +20,7 @@ class InteractiveCard extends StatelessWidget {
       padding: const EdgeInsets.all(
           4.0), // Reduced padding for better space utilization
       child: InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => destination),
-        ),
+        onTap: () => context.push(destination),
         child: Card(
           elevation: 5,
           child: Column(

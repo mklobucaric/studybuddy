@@ -106,7 +106,7 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
       if (!mounted) return;
       if (!uploadState.isUploading) {
         GoRouter.of(context).go(
-            '/questions_answers'); // Replace '/next_route' with your desired route
+            '/questionsAnswers'); // Replace '/next_route' with your desired route
       }
     }
   }

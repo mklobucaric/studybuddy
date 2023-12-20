@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 
 class LocalStorageService {
-  Future<void> saveQAPairs(QAPairsSchema qaPairs) async {
+  Future<void> saveQAPairs(QAContent qaPairs) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/qa_pairs.json');
@@ -16,7 +16,7 @@ class LocalStorageService {
     }
   }
 
-  Future<QAPairsSchema?> loadQAPairs() async {
+  Future<QAContent?> loadQAPairs() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/qa_pairs.json');
@@ -28,7 +28,7 @@ class LocalStorageService {
       }
 
       final String content = await file.readAsString();
-      return QAPairsSchema.fromJson(json.decode(content));
+      return QAContent.fromJson(json.decode(content));
     } catch (e) {
       // Handle errors in reading the file or parsing JSON
       print('Error loading QA pairs: $e');

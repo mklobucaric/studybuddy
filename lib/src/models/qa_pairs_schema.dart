@@ -22,16 +22,21 @@ class QAPair {
   }
 }
 
-class QAPairsSchema {
+class QAContent {
+  final String date;
   final String topic;
   final String briefSummary;
   final List<QAPair> qaPairs;
 
-  QAPairsSchema(
-      {required this.topic, required this.briefSummary, required this.qaPairs});
+  QAContent(
+      {required this.date,
+      required this.topic,
+      required this.briefSummary,
+      required this.qaPairs});
 
-  factory QAPairsSchema.fromJson(Map<String, dynamic> json) {
-    return QAPairsSchema(
+  factory QAContent.fromJson(Map<String, dynamic> json) {
+    return QAContent(
+      date: json['date'],
       topic: json['topic'],
       briefSummary: json['brief_summary'],
       qaPairs: (json['qa_pairs'] as List)
