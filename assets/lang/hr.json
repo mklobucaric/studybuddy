@@ -35,10 +35,11 @@
     "noFilesSelected": "Nisu odabrane datoteke",
     "questionsTitle": "Pitanja",
     "customquestionsTitle": "Prilagođena pitanja",
-    "selectDocuments": "Dodatna pitanja",
+    "selectDocuments": "Odaberite dokumente",
     "pickDocumentsTitle": "Odaberite dokumente",
     "askFollowUpQuestionLabel": "Postavite slijedeće pitanje.",
     "uploadDocuments": "Pošaljite dokumente",
     "additionalquestionsTitle": "Dodatna pitanja",
-    "cameraNotAvailable": "Kamera nije dostupna"
+    "cameraNotAvailable": "Kamera nije dostupna",
+    "noDataMessage": "Nema dostupnih QA sadržaja"
 }

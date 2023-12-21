@@ -1,7 +1,9 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
+import 'package:studybuddy/src/services/local_storage_service_interface.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -9,11 +11,12 @@ import 'dart:io';
 class ApiService {
   final String _baseUrl =
       'https://your-backend-api.com'; // Replace with your actual API URL
-
+  LocalStorageServiceInterface localStorageService = getLocalStorageService();
   // Function to upload documents
   Future<bool> uploadDocumentsFromDirectory(
       String directoryPath, String languageCode) async {
     // Assuming directoryPath is the path to the directory containing the photos
+
     final uri = Uri.parse('$_baseUrl/api/upload');
     String? firebaseToken =
         await FirebaseAuth.instance.currentUser?.getIdToken();
@@ -56,7 +59,7 @@ class ApiService {
 
       // Save the QAContent object locally
       try {
-        await LocalStorageService().saveQAPairs(qaContent);
+        await localStorageService.saveQAContent(qaContent);
         return true;
       } catch (e) {
         print('Error saving QA pairs: $e');
@@ -69,7 +72,8 @@ class ApiService {
   }
 
   Future<bool> uploadDocuments(
-      List<String> filePaths, String languageCode) async {
+      List<PlatformFile> files, String languageCode) async {
+    LocalStorageServiceInterface localStorageService = getLocalStorageService();
     final uri = Uri.parse('$_baseUrl/api/upload');
     String? firebaseToken =
         await FirebaseAuth.instance.currentUser?.getIdToken();
@@ -86,12 +90,11 @@ class ApiService {
       'Authorization': 'Bearer $firebaseToken'
     });
 
-    for (var path in filePaths) {
-      File file = File(path);
-      request.files.add(await http.MultipartFile.fromPath(
+    for (var file in files) {
+      request.files.add(http.MultipartFile.fromBytes(
         'files',
-        file.path,
-        filename: file.path.split("/").last,
+        file.bytes!,
+        filename: file.name,
       ));
     }
 
@@ -109,7 +112,7 @@ class ApiService {
 
       // Save the QAContent object locally
       try {
-        await LocalStorageService().saveQAPairs(qaContent);
+        await localStorageService.saveQAContent(qaContent);
         return true;
       } catch (e) {
         print('Error saving QA pairs: $e');

@@ -35,10 +35,11 @@
     "noFilesSelected": "No files selected",
     "questionsTitle": "Questions",
     "customquestionsTitle": "Custom Questions",
-    "selectDocuments": "Additional Questions",
+    "selectDocuments": "Select Documents",
     "pickDocumentsTitle": "Pick Documents",
     "askFollowUpQuestionLabel": "Ask a follow up question.",
     "uploadDocuments": "Upload Documents",
     "additionalquestionsTitle": "Additional Questions",
-    "cameraNotAvailable": "Camera not available"
+    "cameraNotAvailable": "Camera not available",
+    "noDataMessage": "No QA content available"
 }

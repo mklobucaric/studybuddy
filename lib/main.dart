@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:studybuddy/src/states/upload_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationController()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => UploadState()),
         // ... other providers
       ],
       child: const MyApp(),

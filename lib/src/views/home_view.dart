@@ -1,21 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/controllers/authentication_controller.dart';
-import 'camera_view.dart';
-import 'document_picker_view.dart';
-import 'questions_view.dart';
-import 'ask_custom_questions_view.dart';
-//import 'package:studybuddy/src/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:studybuddy/src/states/upload_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:studybuddy/src/models/history.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:studybuddy/src/widgets/interactive_card.dart';
+import 'package:studybuddy/src/services/local_storage_service.dart';
+import 'package:studybuddy/src/services/local_storage_service_interface.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -39,13 +33,17 @@ class _HomeViewState extends State<HomeView> {
     setState(() => _isLoading = true);
     try {
       var snapshot = await _firestore.collection('history').get();
+      print('Number of documents fetched: ${snapshot.size}');
       setState(() {
         _historyItems = snapshot.docs
             .map((doc) => HistoryItem.fromJson(doc.data()))
             .toList();
+        print(_historyItems);
       });
-    } catch (e) {
-      // Handle errors
+    } catch (e, stackTrace) {
+      print('Error fetching history items: $e');
+      print('Stack Trace: $stackTrace');
+      // Optionally, handle different types of exceptions differently
     } finally {
       setState(() => _isLoading = false);
     }
@@ -64,114 +62,110 @@ class _HomeViewState extends State<HomeView> {
     // Calculate the aspect ratio for the cards
     double cardAspectRatio = 4 / 3; // Example aspect ratio
 
-    return ChangeNotifierProvider(
-        create: (context) => UploadState(),
-        child: Scaffold(
-          appBar: AppBar(
-            title: InkWell(
-              onTap: () {
-                // Use go_router to navigate to HomeView
-                GoRouter.of(context).go('/home');
-              },
-              child: Text(localizations?.translate('title') ?? 'Study Buddy'),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Wrap(
-                        children: <Widget>[
-                          ListTile(
-                            leading: const Icon(Icons.exit_to_app),
-                            title: Text(localizations?.translate('logout') ??
-                                'Logout'), // Localized text
-                            onTap: () {
-                              // Perform sign-out logic
-                              authController.logout();
-                              context.go('/');
-                            },
-                          ),
-                        ],
-                      );
-                    },
+    return Scaffold(
+      appBar: AppBar(
+        title: InkWell(
+          onTap: () {
+            // Use go_router to navigate to HomeView
+            GoRouter.of(context).go('/home');
+          },
+          child: Text(localizations?.translate('title') ?? 'Study Buddy'),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Wrap(
+                    children: <Widget>[
+                      ListTile(
+                        leading: const Icon(Icons.exit_to_app),
+                        title: Text(localizations?.translate('logout') ??
+                            'Logout'), // Localized text
+                        onTap: () {
+                          // Perform sign-out logic
+                          authController.logout();
+                          context.go('/');
+                        },
+                      ),
+                    ],
                   );
                 },
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context)
-                      .primaryTextTheme
-                      .titleLarge
-                      ?.color, // Ensures text color matches AppBar
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16), // Same horizontal padding as InkWell
-                ),
-                child: Text(
-                  '${currentUserJson?.firstName ?? ""} ${currentUserJson?.lastName ?? ""}',
-                ),
-              ),
-              PopupMenuButton<String>(
-                onSelected: (String value) {
-                  var localeProvider =
-                      Provider.of<LocaleProvider>(context, listen: false);
-                  localeProvider.setLocale(Locale(value));
-                },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'en',
-                    child: Text('English'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'de',
-                    child: Text('Deutsch'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'hr',
-                    child: Text('Hrvatski'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'hu',
-                    child: Text('Magyar'),
-                  ),
-                ],
-                icon:
-                    const Icon(Icons.language), // Icon for the dropdown button
-              ),
-            ],
-          ),
-          drawer: _buildHistoryDrawer(), // Add the history drawer
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Two items per row
-                childAspectRatio:
-                    cardAspectRatio, // Set the aspect ratio of the card
-              ),
-              itemCount: gridItemCount,
-              itemBuilder: (context, index) {
-                // Based on index, you can determine which card to build
-                switch (index) {
-                  case 0:
-                    return const InteractiveCard(
-                        label: 'take_photo', destination: '/camera');
-                  case 1:
-                    return const InteractiveCard(
-                        label: 'pick_document', destination: '/pickDocuments');
-                  case 2:
-                    return const InteractiveCard(
-                        label: 'questions', destination: '/questionsAnswers');
-                  case 3:
-                    return const InteractiveCard(
-                        label: 'submit_question',
-                        destination: '/customQuestions');
-                  default:
-                    return const Placeholder(); // Fallback placeholder
-                }
-              },
+              );
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context)
+                  .primaryTextTheme
+                  .titleLarge
+                  ?.color, // Ensures text color matches AppBar
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16), // Same horizontal padding as InkWell
+            ),
+            child: Text(
+              '${currentUserJson?.firstName ?? ""} ${currentUserJson?.lastName ?? ""}',
             ),
           ),
-        ));
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              var localeProvider =
+                  Provider.of<LocaleProvider>(context, listen: false);
+              localeProvider.setLocale(Locale(value));
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'en',
+                child: Text('English'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'de',
+                child: Text('Deutsch'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hr',
+                child: Text('Hrvatski'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'hu',
+                child: Text('Magyar'),
+              ),
+            ],
+            icon: const Icon(Icons.language), // Icon for the dropdown button
+          ),
+        ],
+      ),
+      drawer: _buildHistoryDrawer(), // Add the history drawer
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Two items per row
+            childAspectRatio:
+                cardAspectRatio, // Set the aspect ratio of the card
+          ),
+          itemCount: gridItemCount,
+          itemBuilder: (context, index) {
+            // Based on index, you can determine which card to build
+            switch (index) {
+              case 0:
+                return const InteractiveCard(
+                    label: 'take_photo', destination: '/camera');
+              case 1:
+                return const InteractiveCard(
+                    label: 'pick_document', destination: '/pickDocuments');
+              case 2:
+                return const InteractiveCard(
+                    label: 'questions', destination: '/questionsAnswers');
+              case 3:
+                return const InteractiveCard(
+                    label: 'submit_question', destination: '/customQuestions');
+              default:
+                return const Placeholder(); // Fallback placeholder
+            }
+          },
+        ),
+      ),
+    );
   }
 
   Widget _buildHistoryDrawer() {
@@ -180,7 +174,20 @@ class _HomeViewState extends State<HomeView> {
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               children: [
-                const DrawerHeader(child: Text('History')),
+                Container(
+                  padding: const EdgeInsets.all(
+                      16.0), // You can adjust the padding as needed
+                  color: Theme.of(context)
+                      .primaryColor, // Optional: to style the header container
+                  child: const Text(
+                    'Q&A History',
+                    style: TextStyle(
+                      fontSize: 24.0, // You can adjust the font size as needed
+                      color: Colors
+                          .white, // Choose a text color that contrasts with the container color
+                    ),
+                  ),
+                ),
                 ..._historyItems.map((item) => ListTile(
                       title: Text(item.topic),
                       subtitle: Text('${item.briefSummary}\n${item.date}'),
@@ -194,23 +201,34 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _onHistoryItemTap(HistoryItem item) async {
     // Your existing _onHistoryItemTap implementation...
     // Fetch the corresponding Q&A document
+    LocalStorageServiceInterface localStorageService = getLocalStorageService();
+    ;
     setState(() => _isLoading = true);
     try {
-      var qaDoc = await _firestore
-          .collection('questionsAnswers')
-          .doc(item.qaReference)
-          .get();
-      if (qaDoc.exists) {
-        // Save the Q&A to a local file
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/${item.qaReference}.json');
-        await file.writeAsString(json.encode(qaDoc.data()));
+      List<QueryDocumentSnapshot> qaDocs = await getDocumentsByFields(
+        item.date,
+        item.topic,
+        item.userID,
+      );
+      if (qaDocs.isNotEmpty) {
+        var firstDoc = qaDocs.first;
+        var firstDocData = firstDoc.data();
+        if (firstDocData != null) {
+          var qaContent =
+              QAContent.fromJson(firstDocData as Map<String, dynamic>);
+          // Save the Q&A to a local file
+          await localStorageService.saveQAContent(qaContent);
+          // Use qaContent as needed
+        } else {
+          // Handle the case where the document data is null
+          // This might mean the document is empty or doesn't exist
+        }
 
         // Check if the widget is still in the widget tree
         if (!mounted) return;
 
         // Redirect to QuestionsView with the saved file
-        GoRouter.of(context).go('/questions_view', extra: file.path);
+        GoRouter.of(context).go('/questionsAnswers');
       }
     } catch (e) {
       // Handle errors
@@ -218,46 +236,16 @@ class _HomeViewState extends State<HomeView> {
       setState(() => _isLoading = false);
     }
   }
+
+  Future<List<QueryDocumentSnapshot>> getDocumentsByFields(
+      String date, String topic, String userID) async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('questions_answers')
+        .where('date', isEqualTo: date)
+        .where('topic', isEqualTo: topic)
+        .where('user_id', isEqualTo: userID)
+        .get();
+
+    return querySnapshot.docs;
+  }
 }
-
-
-  // Widget _buildInteractiveCard(
-  //     BuildContext context, String label, Widget destination) {
-  //   var localizations = AppLocalizations.of(context); // For localized text
-
-  //   return Padding(
-  //     padding: const EdgeInsets.all(
-  //         4.0), // Reduced padding for better space utilization
-  //     child: InkWell(
-  //       onTap: () => Navigator.push(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => destination),
-  //       ),
-  //       child: Card(
-  //         elevation: 5,
-
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             Expanded(
-  //               child: Image.asset('assets/images/${label}_icon.png',
-  //                   fit: BoxFit.contain), // Adjust image size within card
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.all(8.0),
-  //               child: Text(
-  //                 localizations?.translate(label) ?? 'Default Text',
-  //                 style: const TextStyle(
-  //                     fontSize: 16,
-  //                     fontWeight:
-  //                         FontWeight.bold), // Adjust font size if necessary
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         //        ),
-  //       ),
-  //     ),
-  //   );
-  // }
-

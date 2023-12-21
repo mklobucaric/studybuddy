@@ -6,6 +6,7 @@ import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
+import 'package:studybuddy/src/services/local_storage_service_interface.dart';
 
 class AdditionalQuestionsView extends StatefulWidget {
   final QAPair initialQAPair;
@@ -42,8 +43,9 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
   }
 
   Future<void> _loadQAPairs() async {
+    LocalStorageServiceInterface localStorageService = getLocalStorageService();
     try {
-      var loadedQAContent = await LocalStorageService().loadQAPairs();
+      var loadedQAContent = await localStorageService.loadQAContent();
       setState(() {
         qaContent = loadedQAContent;
         _isLoading = false;

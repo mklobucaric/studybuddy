@@ -35,10 +35,11 @@
     "noFilesSelected": "Keine Dateien ausgewählt",
     "questionsTitle": "Fragen",
     "customquestionsTitle": "Benutzerdefinierte Fragen",
-    "selectDocuments": "Zusätzliche Fragen",
+    "selectDocuments": "Dokumente auswählen",
     "pickDocumentsTitle": "Dokumente auswählen",
     "askFollowUpQuestionLabel": "Stellen Sie eine Folgefrage.",
     "uploadDocuments": "Dokumente hochladen",
     "additionalquestionsTitle": "Zusatzfragen",
-    "cameraNotAvailable": "Kamera nicht verfügbar"
+    "cameraNotAvailable": "Kamera nicht verfügbar",
+    "noDataMessage": "Keine QA-Inhalte verfügbar"
 }

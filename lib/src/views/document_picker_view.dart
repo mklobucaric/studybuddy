@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studybuddy/src/services/file_picker_service.dart';
@@ -14,7 +15,7 @@ class DocumentPickerView extends StatefulWidget {
 }
 
 class _DocumentPickerViewState extends State<DocumentPickerView> {
-  List<String>? _pickedFilePaths; // Store file paths instead of just names
+  List<PlatformFile> _pickedFiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +73,9 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
 
   Widget _buildFileList() {
     var localizations = AppLocalizations.of(context);
-    if (_pickedFilePaths != null) {
+    if (_pickedFiles.isNotEmpty) {
       return Column(
-        children: _pickedFilePaths!
-            .map((path) => Text(path.split('/').last))
-            .toList(),
+        children: _pickedFiles.map((file) => Text(file.name)).toList(),
       );
     } else {
       return Text(
@@ -85,22 +84,21 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
   }
 
   Future<void> _pickDocuments() async {
-    final filePickerService =
-        Provider.of<FilePickerService>(context, listen: false);
+    final filePickerService = FilePickerService();
     final results = await filePickerService.pickMultipleFiles();
 
     if (results != null) {
       setState(() {
-        _pickedFilePaths =
-            results.files.map((file) => file.path).cast<String>().toList();
+        _pickedFiles = results.files;
+        //print(_pickedFiles.map((file) => file.name).toList());
       });
     }
   }
 
   Future<void> _uploadDocuments(context, String languageCode) async {
     final uploadState = Provider.of<UploadState>(context, listen: false);
-    if (_pickedFilePaths != null) {
-      await uploadState.uploadDocuments(_pickedFilePaths!, languageCode);
+    if (_pickedFiles.isNotEmpty) {
+      await uploadState.uploadDocuments(_pickedFiles, languageCode);
 
       // If the widget is still mounted and upload is complete, navigate to another view
       if (!mounted) return;

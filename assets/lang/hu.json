@@ -35,10 +35,11 @@
     "noFilesSelected": "Nincsenek kiválasztott fájlok",
     "questionsTitle": "Kérdések",
     "customquestionsTitle": "Egyedi kérdések",
-    "selectDocuments": "További kérdések",
+    "selectDocuments": "Dokumentumok kiválasztása",
     "pickDocumentsTitle": "Válasszon dokumentumokat",
     "askFollowUpQuestionLabel": "Tegyen fel egy további kérdést.",
     "uploadDocuments": "Dokumentumok feltöltése",
     "additionalquestionsTitle": "További kérdések",
-    "cameraNotAvailable": "A kamera nem érhető el"
+    "cameraNotAvailable": "A kamera nem érhető el",
+    "noDataMessage": "Nincs QA tartalom elérhető"
 }

@@ -1,11 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:go_router/go_router.dart';
 import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
+import 'package:studybuddy/src/services/local_storage_service_interface.dart';
 
 class QuestionsView extends StatefulWidget {
   const QuestionsView({super.key});
@@ -26,8 +24,9 @@ class _QuestionsViewState extends State<QuestionsView> {
   }
 
   Future<void> _loadQAPairs() async {
+    LocalStorageServiceInterface localStorageService = getLocalStorageService();
     try {
-      var loadedQAContent = await LocalStorageService().loadQAPairs();
+      var loadedQAContent = await localStorageService.loadQAContent();
       setState(() {
         qaContent = loadedQAContent;
         isLoading = false;
@@ -67,38 +66,61 @@ class _QuestionsViewState extends State<QuestionsView> {
 
     return Scaffold(
       appBar: AppBar(
-          title:
-              Text(localizations?.translate('questionsTitle') ?? 'Questions')),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              qaContent!.date,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              qaContent!.topic,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(qaContent!.briefSummary),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: qaContent!.qaPairs.length,
-              itemBuilder: (context, index) {
-                return _buildQuestionItem(qaContent!.qaPairs[index], index);
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                // Use go_router to navigate to HomeView
+                GoRouter.of(context).go('/home');
               },
+              child: const Text('Study Buddy'),
             ),
-          ),
-        ],
+            Text(localizations?.translate('questionsTitle') ?? 'Questions')
+          ],
+        ),
       ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator()) // Show loading indicator
+          : qaContent == null
+              ? Center(
+                  child: Text(localizations?.translate('noDataMessage') ??
+                      'No QA content available.')) // Show no data message
+              : _buildQAContent(), // Show QA content
+    );
+  }
+
+  Widget _buildQAContent() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            qaContent!.date,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            qaContent!.topic,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(qaContent!.briefSummary),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: qaContent!.qaPairs.length,
+            itemBuilder: (context, index) {
+              return _buildQuestionItem(qaContent!.qaPairs[index], index);
+            },
+          ),
+        ),
+      ],
     );
   }
 

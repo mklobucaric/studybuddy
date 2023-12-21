@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:studybuddy/src/services/api_service.dart';
 
@@ -29,12 +30,12 @@ class UploadState with ChangeNotifier {
   }
 
   Future<void> uploadDocuments(
-      List<String> filePaths, String languageCode) async {
+      List<PlatformFile> files, String languageCode) async {
     _isUploading = true;
     notifyListeners();
 
     try {
-      bool success = await _apiService.uploadDocuments(filePaths, languageCode);
+      bool success = await _apiService.uploadDocuments(files, languageCode);
       if (success) {
         // Handle successful upload
       } else {
