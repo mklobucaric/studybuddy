@@ -20,10 +20,20 @@ class _CameraViewState extends State<CameraView> {
   @override
   void initState() {
     super.initState();
-    _cameraService.initializeCamera();
+    _cameraService.initializeCamera(() {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
-  Future<void> _takePicture() async {
+  @override
+  void dispose() {
+    _cameraService.dispose(); // Dispose the camera service
+    super.dispose();
+  }
+
+  Future<void> _takePhoto() async {
     await _cameraService.takePhoto();
     // Optionally, update your state to show a thumbnail of the picture
   }
@@ -50,20 +60,9 @@ class _CameraViewState extends State<CameraView> {
     }
   }
 
-  // // Call the ApiService to upload the photos
-  // bool uploadSuccess = await _apiService.uploadDocuments(photosDirPath);
-  // if (uploadSuccess) {
-  //   await _cameraService.clearPhotos();
-  //   GoRouter.of(context)
-  //       .go('/questionsAnswers'); // Adjust the route as needed
-  //   // Here you would also update your state to reflect that the photos are cleared
-  // } else {
-  //   // Handle upload failure (e.g., retry, show an error message)
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final uploadState = Provider.of<UploadState>(context, listen: false);
+    //final uploadState = Provider.of<UploadState>(context, listen: false);
     var localizations = AppLocalizations.of(context);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     return Scaffold(
@@ -78,56 +77,46 @@ class _CameraViewState extends State<CameraView> {
               },
               child: const Text('Study Buddy'),
             ),
-            Text(localizations?.translate('pickDocumentsTitle') ??
-                'Pick Documents')
+            Text(localizations?.translate('take_photo') ?? 'Take Photo')
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child:
-                // Display the camera preview here,
-                FutureBuilder<void>(
-              future: _cameraService.initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  // If the Future is complete, display the preview
-                  // Ensure that _cameraService.controller is not null
-                  if (_cameraService.controller != null) {
-                    return CameraPreview(_cameraService.controller!);
-                  } else {
-                    return Text(
-                        localizations?.translate('cameraNotAvailable') ??
-                            'Camera not available');
-                  }
-                } else {
-                  // Otherwise, display a loading indicator
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ),
-          if (uploadState.isUploading)
-            const LinearProgressIndicator(), // Shows a progress bar when uploading
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FloatingActionButton(
-                onPressed: _takePicture,
-                tooltip: 'Take Photo',
-                child: const Icon(Icons.camera_alt),
-              ),
-              const SizedBox(width: 20),
-              FloatingActionButton(
-                onPressed: () => _uploadAndClear(
-                    context, localeProvider.currentLocale.languageCode),
-                tooltip: 'Upload Photos',
-                child: const Icon(Icons.cloud_upload),
-              ),
-            ],
-          ),
-        ],
+      body: Consumer<UploadState>(
+        builder: (context, uploadState, child) {
+          // Check if either camera is initializing or upload is in progress
+          if (uploadState.isUploading || !_cameraService.isCameraInitialized) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  child: _cameraService.controller != null
+                      ? CameraPreview(_cameraService.controller!)
+                      : Text(localizations?.translate('cameraNotAvailable') ??
+                          'Camera not available'),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 20),
+                    FloatingActionButton(
+                      onPressed: _takePhoto,
+                      tooltip: 'Take Photo',
+                      child: const Icon(Icons.camera_alt),
+                    ),
+                    const SizedBox(width: 20),
+                    FloatingActionButton(
+                      onPressed: () => _uploadAndClear(
+                          context, localeProvider.currentLocale.languageCode),
+                      tooltip: 'Upload Photos',
+                      child: const Icon(Icons.cloud_upload),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }

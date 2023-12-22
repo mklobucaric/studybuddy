@@ -25,12 +25,23 @@ class AppTheme {
 
       // Define the default ButtonTheme. Use this to style buttons.
       buttonTheme: ButtonThemeData(
-        buttonColor: Colors.blueAccent,
+        //buttonColor: Colors.blueAccent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         textTheme: ButtonTextTheme.primary,
+      ),
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          //backgroundColor: Colors.blueAccent, // Background color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          // other properties like textStyle
+        ),
       ),
 
       // Other customizations like AppBar, FAB

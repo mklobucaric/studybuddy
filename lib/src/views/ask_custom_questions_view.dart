@@ -66,7 +66,7 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
               },
               child: const Text('Study Buddy'),
             ),
-            Text(localizations?.translate('customquestionsTitle') ??
+            Text(localizations?.translate('customQuestionsTitle') ??
                 'Custom Questions')
           ],
         ),

@@ -33,13 +33,13 @@
     "existing_email": "Már létezik fiók ehhez az e-mail címhez.",
     "askQuestionLabel": "Kérdezz",
     "noFilesSelected": "Nincsenek kiválasztott fájlok",
-    "questionsTitle": "Kérdések",
-    "customquestionsTitle": "Egyedi kérdések",
+    "questionsTitle": "Q&A",
+    "customQuestionsTitle": "Kérdések",
     "selectDocuments": "Dokumentumok kiválasztása",
     "pickDocumentsTitle": "Válasszon dokumentumokat",
     "askFollowUpQuestionLabel": "Tegyen fel egy további kérdést.",
     "uploadDocuments": "Dokumentumok feltöltése",
-    "additionalquestionsTitle": "További kérdések",
+    "additionalquestionsTitle": "Kérdések",
     "cameraNotAvailable": "A kamera nem érhető el",
     "noDataMessage": "Nincs QA tartalom elérhető"
 }

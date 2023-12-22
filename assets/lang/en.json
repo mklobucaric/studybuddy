@@ -33,13 +33,14 @@
     "existing_email": "An account already exists for that email",
     "askQuestionLabel": "Ask a question",
     "noFilesSelected": "No files selected",
-    "questionsTitle": "Questions",
-    "customquestionsTitle": "Custom Questions",
+    "questionsTitle": "Q&A",
+    "customQuestionsTitle": "Questions",
     "selectDocuments": "Select Documents",
     "pickDocumentsTitle": "Pick Documents",
     "askFollowUpQuestionLabel": "Ask a follow up question.",
     "uploadDocuments": "Upload Documents",
-    "additionalquestionsTitle": "Additional Questions",
+    "additionalquestionsTitle": "Questions",
     "cameraNotAvailable": "Camera not available",
     "noDataMessage": "No QA content available"
 }
+

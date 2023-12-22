@@ -7,25 +7,50 @@ import 'package:intl/intl.dart';
 
 class CameraService {
   CameraController? _controller;
-  Future<void>? _initializeControllerFuture;
   final List<XFile> _takenPhotos = [];
   // The private variable holding the directory path
   String? _photosDirectoryPath;
   // Getter to retrieve the photos directory path
   String? get photosDirectoryPath => _photosDirectoryPath;
-  // Getter for _initializeControllerFuture
-  Future<void>? get initializeControllerFuture => _initializeControllerFuture;
+  bool _isCameraInitialized = false; // New flag for initialization status
+
   // Getter for the CameraController
   CameraController? get controller => _controller;
 
-  Future<void> initializeCamera() async {
-    final cameras = await availableCameras();
-    if (cameras.isNotEmpty) {
-      _controller = CameraController(cameras.first, ResolutionPreset.veryHigh);
-      _initializeControllerFuture = _controller!.initialize();
-      await _initializeControllerFuture; // Await the future here
-    } else {
-      throw 'No cameras available';
+  // Getter for camera initialization status
+  bool get isCameraInitialized => _isCameraInitialized;
+
+  // Dispose method to release the camera resources
+  Future<void> dispose() async {
+    if (_controller != null && _controller!.value.isInitialized) {
+      try {
+        await _controller!.dispose();
+      } catch (e) {
+        // Log or handle the exception
+        print('Error disposing camera controller: $e');
+      }
+      _controller = null;
+    }
+  }
+
+  Future<void> initializeCamera(Function onCameraInitialized) async {
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isNotEmpty) {
+        _controller = CameraController(cameras.first, ResolutionPreset.low);
+        await _controller!.initialize();
+        _isCameraInitialized =
+            true; // Update the flag when initialization is complete
+        onCameraInitialized(); // Call the passed callback function
+      } else {
+        throw 'No cameras available'; // Custom exception
+      }
+    } catch (e) {
+      // Handle the error appropriately
+      print('Error initializing camera: $e');
+      _isCameraInitialized = false; // Update the flag in case of an error
+      rethrow;
+      // or handle it differently (e.g., notify users, log to a service, etc.)
     }
   }
 
@@ -70,36 +95,4 @@ class CameraService {
       }
     }
   }
-
-  // Future<void> takeAndSavePhoto() async {
-  //   // Ensure the controller is initialized before attempting to take a picture
-  //   if (_controller == null) {
-  //     throw Exception('CameraController is not created');
-  //   }
-
-  //   if (!_controller!.value.isInitialized) {
-  //     throw Exception('Camera is not initialized');
-  //   }
-  //   try {
-  //     // Take the photo
-  //     final XFile photo = await _controller!.takePicture();
-
-  //     // Get the directory to save photos
-  //     final Directory appDocDir = await getApplicationDocumentsDirectory();
-  //     final String photosDirPath = path.join(
-  //         appDocDir.path, 'photos_${DateTime.now().toIso8601String()}');
-  //     final Directory photosDir =
-  //         await Directory(photosDirPath).create(recursive: true);
-
-  //     // Save the photo to the directory
-  //     final String photoPath =
-  //         path.join(photosDir.path, 'photo_${_takenPhotos.length + 1}.jpg');
-  //     await photo.saveTo(photoPath);
-
-  //     // Add the photo to the list of taken photos
-  //     _takenPhotos.add(photo);
-  //   } catch (e) {
-  //     // Handle exceptions, possibly by showing an error message to the user
-  //   }
-  // }
 }

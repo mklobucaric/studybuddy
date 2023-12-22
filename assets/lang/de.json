@@ -33,13 +33,13 @@
     "existing_email": "Es existiert bereits ein Konto für diese E-Mail-Adresse.",
     "askQuestionLabel": "Frage stellen",
     "noFilesSelected": "Keine Dateien ausgewählt",
-    "questionsTitle": "Fragen",
-    "customquestionsTitle": "Benutzerdefinierte Fragen",
+    "questionsTitle": "Q&A",
+    "customQuestionsTitle": "Fragen",
     "selectDocuments": "Dokumente auswählen",
     "pickDocumentsTitle": "Dokumente auswählen",
     "askFollowUpQuestionLabel": "Stellen Sie eine Folgefrage.",
     "uploadDocuments": "Dokumente hochladen",
-    "additionalquestionsTitle": "Zusatzfragen",
+    "additionalquestionsTitle": "Fragen",
     "cameraNotAvailable": "Kamera nicht verfügbar",
     "noDataMessage": "Keine QA-Inhalte verfügbar"
 }

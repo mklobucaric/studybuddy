@@ -33,13 +33,13 @@
     "existing_email": "Već postoji račun za tu e-mail adresu.",
     "askQuestionLabel": "Postavi pitanje",
     "noFilesSelected": "Nisu odabrane datoteke",
-    "questionsTitle": "Pitanja",
-    "customquestionsTitle": "Prilagođena pitanja",
+    "questionsTitle": "Q&A",
+    "customQuestionsTitle": "Pitanja",
     "selectDocuments": "Odaberite dokumente",
     "pickDocumentsTitle": "Odaberite dokumente",
     "askFollowUpQuestionLabel": "Postavite slijedeće pitanje.",
     "uploadDocuments": "Pošaljite dokumente",
-    "additionalquestionsTitle": "Dodatna pitanja",
+    "additionalquestionsTitle": "Pitanja",
     "cameraNotAvailable": "Kamera nije dostupna",
     "noDataMessage": "Nema dostupnih QA sadržaja"
 }

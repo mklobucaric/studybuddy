@@ -46,17 +46,28 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment
+                      .stretch, // Stretch the buttons in the cross axis
                   children: <Widget>[
-                    ElevatedButton(
-                      onPressed: _pickDocuments,
-                      child: Text(localizations?.translate('selectDocuments') ??
-                          'Select Documents'),
+                    IntrinsicWidth(
+                      stepWidth: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _pickDocuments,
+                        child: Text(
+                            localizations?.translate('selectDocuments') ??
+                                'Select Documents'),
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: () => _uploadDocuments(
-                          context, localeProvider.currentLocale.languageCode),
-                      child: Text(localizations?.translate('uploadDocuments') ??
-                          'Upload Documents'),
+                    const SizedBox(height: 10),
+                    IntrinsicWidth(
+                      stepWidth: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => _uploadDocuments(
+                            context, localeProvider.currentLocale.languageCode),
+                        child: Text(
+                            localizations?.translate('uploadDocuments') ??
+                                'Upload Documents'),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     _buildFileList(),

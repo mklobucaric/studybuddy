@@ -18,7 +18,7 @@ class InteractiveCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(
-          4.0), // Reduced padding for better space utilization
+          2.0), // Reduced padding for better space utilization
       child: InkWell(
         onTap: () => context.push(destination),
         child: Card(
@@ -33,7 +33,7 @@ class InteractiveCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Text(
                   localizations?.translate(label) ?? 'Default Text',
                   style: const TextStyle(

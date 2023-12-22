@@ -56,7 +56,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                 },
                 child: const Text('Study Buddy'),
               ),
-              Text(localizations?.translate('questionsTitle') ?? 'Questions')
+              Text(localizations?.translate('questionsTitle') ?? 'Q&A')
             ],
           ),
         ),

@@ -10,6 +10,7 @@ import 'package:studybuddy/src/models/history.dart';
 import 'package:studybuddy/src/widgets/interactive_card.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
 import 'package:studybuddy/src/services/local_storage_service_interface.dart';
+import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -58,9 +59,10 @@ class _HomeViewState extends State<HomeView> {
 
     // Determine the number of items in the grid
     int gridItemCount = 4; // Adjust as needed
+    const crossAxisCount = kIsWeb ? 2 : 1;
 
     // Calculate the aspect ratio for the cards
-    double cardAspectRatio = 4 / 3; // Example aspect ratio
+    const cardAspectRatio = kIsWeb ? 4 / 3 : 2.1; // Example aspect ratio
 
     return Scaffold(
       appBar: AppBar(
@@ -138,8 +140,9 @@ class _HomeViewState extends State<HomeView> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Two items per row
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            // Set crossAxisCount based on platform
+            crossAxisCount: crossAxisCount, // Two items per row
             childAspectRatio:
                 cardAspectRatio, // Set the aspect ratio of the card
           ),
@@ -177,14 +180,14 @@ class _HomeViewState extends State<HomeView> {
                 Container(
                   padding: const EdgeInsets.all(
                       16.0), // You can adjust the padding as needed
-                  color: Theme.of(context)
-                      .primaryColor, // Optional: to style the header container
+                  // color: Theme.of(context)
+                  //     .primaryColor, // Optional: to style the header container
                   child: const Text(
                     'Q&A History',
                     style: TextStyle(
                       fontSize: 24.0, // You can adjust the font size as needed
-                      color: Colors
-                          .white, // Choose a text color that contrasts with the container color
+                      //  color: Colors
+                      //      .white, // Choose a text color that contrasts with the container color
                     ),
                   ),
                 ),
