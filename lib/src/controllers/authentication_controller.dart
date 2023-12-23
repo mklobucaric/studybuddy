@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:studybuddy/src/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studybuddy/src/models/user.dart';
@@ -40,6 +40,7 @@ class AuthenticationController with ChangeNotifier {
     try {
       _currentUser =
           await _authService.registerWithEmailPassword(email, password);
+      _checkCurrentUserJson();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         errorMessage = 'existing_email';
@@ -81,12 +82,14 @@ class AuthenticationController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      _currentUser = await _authService.signInWithGoogle();
+      _currentUser = await _authService.signInWithGoogle(context);
+      await _authService.checkAndStoreUserData(_currentUser!);
+      _checkCurrentUserJson();
       // Handle successful sign in
     } catch (e) {
       // Handle sign-in error

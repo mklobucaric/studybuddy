@@ -155,7 +155,7 @@ class _HomeViewState extends State<HomeView> {
                     label: 'take_photo', destination: '/camera');
               case 1:
                 return const InteractiveCard(
-                    label: 'pick_document', destination: '/pickDocuments');
+                    label: 'pick_documents', destination: '/pickDocuments');
               case 2:
                 return const InteractiveCard(
                     label: 'questions', destination: '/questionsAnswers');

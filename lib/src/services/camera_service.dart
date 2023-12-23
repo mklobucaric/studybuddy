@@ -37,7 +37,8 @@ class CameraService {
     try {
       final cameras = await availableCameras();
       if (cameras.isNotEmpty) {
-        _controller = CameraController(cameras.first, ResolutionPreset.low);
+        _controller =
+            CameraController(cameras.first, ResolutionPreset.veryHigh);
         await _controller!.initialize();
         _isCameraInitialized =
             true; // Update the flag when initialization is complete

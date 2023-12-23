@@ -155,7 +155,7 @@ class _LoginViewState extends State<LoginView> {
     });
 
     try {
-      await authController.signInWithGoogle();
+      await authController.signInWithGoogle(context);
       if (authController.currentUser != null) {
         // Navigate to the home screen or another appropriate screen
         if (!mounted) return;

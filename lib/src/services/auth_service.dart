@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:studybuddy/src/models/user.dart';
+import 'package:studybuddy/src/utils/dialog_utils.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -40,7 +42,7 @@ class AuthService {
   }
 
   // User Login with Google
-  Future<User?> signInWithGoogle() async {
+  Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null;
@@ -51,20 +53,91 @@ class AuthService {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+      final email = googleUser.email;
 
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-      return userCredential.user;
-    } catch (e) {
+      // Fetch a list of what sign-in methods are available for the conflicting user
+      List<String> userSignInMethods =
+          await _firebaseAuth.fetchSignInMethodsForEmail(email);
+      if (userSignInMethods.isNotEmpty) {
+        if (userSignInMethods.first == 'password') {
+          await Future.delayed(const Duration(seconds: 1));
+
+          // Check if the context is still valid
+          if (!context.mounted) return null;
+          // Prompt user to enter their password
+          String? password = await promptForPassword(context);
+          if (password != null && password.isNotEmpty) {
+            // Sign the user in to their account with the password
+            UserCredential userCredential = await _firebaseAuth
+                .signInWithEmailAndPassword(email: email, password: password);
+
+            // Link the pending credential with the existing account
+            await userCredential.user!.linkWithCredential(credential);
+            return userCredential.user; // Return the user after linking
+          }
+        }
+      } else {
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        return userCredential.user; // Return the user if successful
+      }
+    }
+
+    // UserCredential userCredential =
+    //     await _firebaseAuth.signInWithCredential(credential);
+    // return userCredential.user;
+    catch (e) {
       print(e); // Handle the error properly
       return null;
     }
+    return null;
   }
 
   Future<UserJson> fetchUserData(String userId) async {
     var userDoc = await _firestore.collection('users').doc(userId).get();
     return UserJson.fromJson(
-        userDoc.data()!); // Assuming 'User' is your model class
+        userDoc.data()!); // Assuming 'UserJson' is your model class
+  }
+
+// Function to check and store user data in Firestore
+  Future<void> checkAndStoreUserData(User user) async {
+    final usersCollection = _firestore.collection('users');
+
+    final userDoc = await usersCollection.doc(user.uid).get();
+    print(userDoc.id);
+
+    if (!userDoc.exists) {
+      // If user data doesn't exist, store it in Firestore
+      await usersCollection.doc(user.uid).set({
+        'id': user.uid,
+        'firstName': user.displayName
+            ?.split(' ')
+            .first, // Assuming first part is the first name
+        'lastName': user.displayName
+            ?.split(' ')
+            .last, // Assuming second part is the last name
+        'email': user.email,
+      });
+    }
+  }
+
+  void checkUserPermissions() async {
+    User? user = _firebaseAuth.currentUser;
+    if (user != null) {
+      IdTokenResult tokenResult = await user.getIdTokenResult(true);
+      Map<String, dynamic>? claims = tokenResult.claims;
+
+      if (claims != null) {
+        // Check for specific claims
+        if (claims['admin'] == true) {
+          // Grant admin permissions
+        }
+      } else {
+        print("Claims are null");
+      }
+    } else {
+      print("User is null");
+    }
   }
 
   // Check if User is Logged In

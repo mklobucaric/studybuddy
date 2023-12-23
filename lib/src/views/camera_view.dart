@@ -99,17 +99,21 @@ class _CameraViewState extends State<CameraView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(width: 20),
-                    FloatingActionButton(
+                    IconButton(
                       onPressed: _takePhoto,
                       tooltip: 'Take Photo',
-                      child: const Icon(Icons.camera_alt),
+                      icon: const Icon(Icons.camera_alt, size: 50),
+                      color: Theme.of(context)
+                          .iconTheme
+                          .color, // Keeping the theme color
                     ),
-                    const SizedBox(width: 20),
-                    FloatingActionButton(
+                    const SizedBox(width: 30),
+                    IconButton(
                       onPressed: () => _uploadAndClear(
                           context, localeProvider.currentLocale.languageCode),
                       tooltip: 'Upload Photos',
-                      child: const Icon(Icons.cloud_upload),
+                      icon: const Icon(Icons.cloud_upload, size: 50),
+                      color: Theme.of(context).iconTheme.color,
                     ),
                   ],
                 ),

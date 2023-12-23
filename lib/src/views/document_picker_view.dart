@@ -47,27 +47,28 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment
-                      .stretch, // Stretch the buttons in the cross axis
+                      .stretch, // Stretch the icons in the cross axis
                   children: <Widget>[
-                    IntrinsicWidth(
-                      stepWidth: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _pickDocuments,
-                        child: Text(
-                            localizations?.translate('selectDocuments') ??
-                                'Select Documents'),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    IntrinsicWidth(
-                      stepWidth: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => _uploadDocuments(
-                            context, localeProvider.currentLocale.languageCode),
-                        child: Text(
-                            localizations?.translate('uploadDocuments') ??
-                                'Upload Documents'),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: const Icon(Icons.attach_file, size: 50),
+                            onPressed: _pickDocuments,
+                            color: Theme.of(context).iconTheme.color,
+                            tooltip:
+                                localizations?.translate('pick_documents') ??
+                                    'Pick Documents'),
+                        const SizedBox(width: 30),
+                        IconButton(
+                            icon: const Icon(Icons.cloud_upload, size: 50),
+                            onPressed: () => _uploadDocuments(context,
+                                localeProvider.currentLocale.languageCode),
+                            color: Theme.of(context).iconTheme.color,
+                            tooltip:
+                                localizations?.translate('upload_documents') ??
+                                    'Upload Documents'),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     _buildFileList(),
@@ -89,8 +90,10 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
         children: _pickedFiles.map((file) => Text(file.name)).toList(),
       );
     } else {
-      return Text(
-          localizations?.translate('noFilesSelected') ?? 'No files selected.');
+      return Column(children: [
+        Text(localizations?.translate('noFilesSelected') ??
+            'No files selected.'),
+      ]);
     }
   }
 
