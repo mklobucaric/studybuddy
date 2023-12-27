@@ -11,49 +11,11 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // User Registration with Email and Password
-  Future<User?> registerWithEmailPassword(
-      BuildContext context, String email, String password) async {
+  Future<User?> registerWithEmailPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      User? user = userCredential.user;
-
-      // Prompt user to sign in with Google
-      // This can be a UI prompt/option
-      await Future.delayed(const Duration(seconds: 1));
-
-      // Check if the context is still valid
-      if (!context.mounted) return null;
-      bool shouldLinkGoogle =
-          await promptUserForGoogleLink(context); // Implement this
-
-      if (shouldLinkGoogle) {
-        // Start Google sign-in process
-        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-        if (googleUser == null) return null;
-
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        // Link Google account
-        try {
-          await user?.linkWithCredential(credential);
-        } on FirebaseAuthException catch (e) {
-          // Handle different error scenarios
-          // For example, show an error message to the user
-          await Future.delayed(const Duration(seconds: 1));
-
-          // Check if the context is still valid
-          if (!context.mounted) return null;
-          handleLinkingError(context, e); // Implement this
-        }
-      }
-
-      return user;
+      return userCredential.user;
     } on FirebaseAuthException {
       rethrow;
     } catch (e) {
@@ -91,9 +53,45 @@ class AuthService {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-      return userCredential.user; // Return the user after linking
+      //final email = googleUser.email;
+
+      try {
+        // Attempt to sign in with Google credential
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        return userCredential.user; // Return the user if successful
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          // The account already exists with a different credential
+          String email = e.email!;
+
+          await Future.delayed(const Duration(seconds: 1));
+
+          // Check if the context is still valid
+          if (!context.mounted) return null;
+          // Prompt user to enter their password
+          String? password = await promptForPassword(context);
+
+          try {
+            if (password != null && password.isNotEmpty) {
+              // Sign the user in to their account with the password
+              UserCredential userCredential = await _firebaseAuth
+                  .signInWithEmailAndPassword(email: email, password: password);
+
+              // Link the pending credential with the existing account
+              await userCredential.user!.linkWithCredential(credential);
+              return userCredential.user; // Return the user after linking
+            }
+          } catch (e) {
+            print(e); // Handle errors during account linking
+            return null;
+          }
+        } else {
+          // Handle other FirebaseAuthExceptions
+          print(e);
+          return null;
+        }
+      }
     }
 
     // UserCredential userCredential =
@@ -103,24 +101,14 @@ class AuthService {
       print(e); // Handle the error properly
       return null;
     }
+    return null;
   }
 
-  Future<UserJson?> fetchUserData(String userId) async {
+  Future<UserJson> fetchUserData(String userId) async {
     var userDoc = await _firestore.collection('users').doc(userId).get();
-    if (userDoc.exists) {
-      return UserJson.fromJson(
-          userDoc.data()!); // Assuming 'UserJson' is your model class
-    } else {
-      // User document does not exist
-      return null; // or throw a custom exception if you prefer
-    }
+    return UserJson.fromJson(
+        userDoc.data()!); // Assuming 'UserJson' is your model class
   }
-
-  // Future<UserJson> fetchUserData(String userId) async {
-  //   var userDoc = await _firestore.collection('users').doc(userId).get();
-  //   return UserJson.fromJson(
-  //       userDoc.data()!); // Assuming 'UserJson' is your model class
-  // }
 
 // Function to check and store user data in Firestore
   Future<void> checkAndStoreUserData(User user) async {
@@ -161,45 +149,6 @@ class AuthService {
     } else {
       print("User is null");
     }
-  }
-
-  void handleLinkingError(BuildContext context, FirebaseAuthException e) {
-    String errorMessage;
-
-    switch (e.code) {
-      case "provider-already-linked":
-        errorMessage = "This provider is already linked to your account.";
-        break;
-      case "invalid-credential":
-        errorMessage = "The provided credential is invalid.";
-        break;
-      case "credential-already-in-use":
-        errorMessage = "An account already exists with the same credential.";
-        break;
-      default:
-        errorMessage = "An unknown error occurred.";
-        print(e.toString()); // Optionally log the error for debugging
-    }
-
-    // Display the error message
-    // Here, we are using a simple dialog, but you can use any method you prefer
-    showDialog(
-      context: context, // Ensure you have a BuildContext available
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error Linking Account'),
-          content: Text(errorMessage),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   // Check if User is Logged In

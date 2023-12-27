@@ -42,3 +42,5 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+.env

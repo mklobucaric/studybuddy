@@ -48,3 +48,33 @@ Future<String?> promptForPassword(BuildContext context) async {
     },
   );
 }
+
+Future<bool> promptUserForGoogleLink(BuildContext context) async {
+  return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Link with Google'),
+            content:
+                const Text('Do you want to link your account with Google?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(false); // User chooses not to link with Google
+                },
+              ),
+              TextButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(true); // User chooses to link with Google
+                },
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // In case the dialog is dismissed, default to 'false'
+}

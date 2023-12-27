@@ -74,91 +74,95 @@ class _RegistrationViewState extends State<RegistrationView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextField(
-              controller: _firstNameController,
-              decoration: InputDecoration(
-                labelText:
-                    localizations?.translate('first_name') ?? 'First Name',
-                border: const OutlineInputBorder(),
+        child: SingleChildScrollView(
+          // Add this widget
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextField(
+                controller: _firstNameController,
+                decoration: InputDecoration(
+                  labelText:
+                      localizations?.translate('first_name') ?? 'First Name',
+                  border: const OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _lastNameController,
-              decoration: InputDecoration(
-                labelText: localizations?.translate('last_name') ?? 'Last Name',
-                border: const OutlineInputBorder(),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _lastNameController,
+                decoration: InputDecoration(
+                  labelText:
+                      localizations?.translate('last_name') ?? 'Last Name',
+                  border: const OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    !Validators.isValidEmail(value)) {
-                  return localizations?.translate('valid_email') ??
-                      'Please entar a valid email!';
-                }
-                return null;
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: InputDecoration(
-                labelText: localizations?.translate('email') ?? 'Email',
-                border: const OutlineInputBorder(),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      !Validators.isValidEmail(value)) {
+                    return localizations?.translate('valid_email') ??
+                        'Please entar a valid email!';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                decoration: InputDecoration(
+                  labelText: localizations?.translate('email') ?? 'Email',
+                  border: const OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    !Validators.isValidPassword(value)) {
-                  return localizations?.translate('valid_password') ??
-                      'Please entar a valid password!';
-                }
-                return null;
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: InputDecoration(
-                labelText: localizations?.translate('password') ?? 'Password',
-                border: const OutlineInputBorder(),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      !Validators.isValidPassword(value)) {
+                    return localizations?.translate('valid_password') ??
+                        'Please entar a valid password!';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                decoration: InputDecoration(
+                  labelText: localizations?.translate('password') ?? 'Password',
+                  border: const OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: localizations?.translate('confirm_password') ??
-                    'Confirm Password',
-                border: const OutlineInputBorder(),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: localizations?.translate('confirm_password') ??
+                      'Confirm Password',
+                  border: const OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _register(context),
-              child: Text(localizations?.translate('register') ?? 'Register'),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              _errorMessage,
-              style: const TextStyle(color: Colors.red),
-              textAlign: TextAlign.center,
-            ),
-            TextButton(
-              onPressed: () => context.go('/'),
-              child: Text(localizations?.translate('have_account') ??
-                  "Already have an account? Log in"),
-            ),
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _register(context),
+                child: Text(localizations?.translate('register') ?? 'Register'),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                _errorMessage,
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+              TextButton(
+                onPressed: () => context.go('/'),
+                child: Text(localizations?.translate('have_account') ??
+                    "Already have an account? Log in"),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -182,7 +186,7 @@ class _RegistrationViewState extends State<RegistrationView> {
 
     try {
       String? errorEmail = await authController.register(
-          _emailController.text, _passwordController.text);
+          context, _emailController.text, _passwordController.text);
       if (authController.currentUser != null) {
         // Create a new user object
         UserJson user = UserJson(

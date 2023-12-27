@@ -11,17 +11,20 @@ import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:studybuddy/src/states/upload_state.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize Firebase
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await FirebaseAppCheck.instance.activate(
       // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
       // argument for `webProvider`
-      webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+      webProvider: ReCaptchaV3Provider(dotenv.env['RECAPTCHA_SITE_KEY']!),
       // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
       // your preferred provider. Choose from:
       // 1. Debug provider

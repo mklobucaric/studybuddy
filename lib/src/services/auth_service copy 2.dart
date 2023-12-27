@@ -30,12 +30,9 @@ class AuthService {
       if (shouldLinkGoogle) {
         // Start Google sign-in process
         final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-        if (googleUser == null) return null;
-
         final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
+            await googleUser!.authentication;
+        final credential = GoogleAuthProvider.credential(
           idToken: googleAuth.idToken,
         );
 
@@ -91,9 +88,45 @@ class AuthService {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-      return userCredential.user; // Return the user after linking
+      //final email = googleUser.email;
+
+      try {
+        // Attempt to sign in with Google credential
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        return userCredential.user; // Return the user if successful
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          // The account already exists with a different credential
+          String email = e.email!;
+
+          await Future.delayed(const Duration(seconds: 1));
+
+          // Check if the context is still valid
+          if (!context.mounted) return null;
+          // Prompt user to enter their password
+          String? password = await promptForPassword(context);
+
+          try {
+            if (password != null && password.isNotEmpty) {
+              // Sign the user in to their account with the password
+              UserCredential userCredential = await _firebaseAuth
+                  .signInWithEmailAndPassword(email: email, password: password);
+
+              // Link the pending credential with the existing account
+              await userCredential.user!.linkWithCredential(credential);
+              return userCredential.user; // Return the user after linking
+            }
+          } catch (e) {
+            print(e); // Handle errors during account linking
+            return null;
+          }
+        } else {
+          // Handle other FirebaseAuthExceptions
+          print(e);
+          return null;
+        }
+      }
     }
 
     // UserCredential userCredential =
@@ -103,24 +136,14 @@ class AuthService {
       print(e); // Handle the error properly
       return null;
     }
+    return null;
   }
 
-  Future<UserJson?> fetchUserData(String userId) async {
+  Future<UserJson> fetchUserData(String userId) async {
     var userDoc = await _firestore.collection('users').doc(userId).get();
-    if (userDoc.exists) {
-      return UserJson.fromJson(
-          userDoc.data()!); // Assuming 'UserJson' is your model class
-    } else {
-      // User document does not exist
-      return null; // or throw a custom exception if you prefer
-    }
+    return UserJson.fromJson(
+        userDoc.data()!); // Assuming 'UserJson' is your model class
   }
-
-  // Future<UserJson> fetchUserData(String userId) async {
-  //   var userDoc = await _firestore.collection('users').doc(userId).get();
-  //   return UserJson.fromJson(
-  //       userDoc.data()!); // Assuming 'UserJson' is your model class
-  // }
 
 // Function to check and store user data in Firestore
   Future<void> checkAndStoreUserData(User user) async {

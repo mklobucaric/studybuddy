@@ -32,14 +32,15 @@ class AuthenticationController with ChangeNotifier {
     }
   }
 
-  Future<String?> register(String email, String password) async {
+  Future<String?> register(
+      BuildContext context, String email, String password) async {
     _isLoading = true;
     notifyListeners();
     String? errorMessage;
 
     try {
-      _currentUser =
-          await _authService.registerWithEmailPassword(email, password);
+      _currentUser = await _authService.registerWithEmailPassword(
+          context, email, password);
       _checkCurrentUserJson();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

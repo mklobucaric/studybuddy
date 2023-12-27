@@ -27,13 +27,22 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _fetchHistoryItems();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchHistoryItems();
+    });
   }
 
   Future<void> _fetchHistoryItems() async {
+    var authController =
+        Provider.of<AuthenticationController>(context, listen: false);
+    var currentUser = authController.currentUser;
+    var currentUserId = currentUser?.uid;
     setState(() => _isLoading = true);
     try {
-      var snapshot = await _firestore.collection('history').get();
+      var snapshot = await _firestore
+          .collection('history')
+          .where('user_id', isEqualTo: currentUserId)
+          .get();
       print('Number of documents fetched: ${snapshot.size}');
       setState(() {
         _historyItems = snapshot.docs
@@ -66,13 +75,7 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: InkWell(
-          onTap: () {
-            // Use go_router to navigate to HomeView
-            GoRouter.of(context).go('/home');
-          },
-          child: Text(localizations?.translate('title') ?? 'Study Buddy'),
-        ),
+        title: const Text(" "),
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -205,7 +208,7 @@ class _HomeViewState extends State<HomeView> {
     // Your existing _onHistoryItemTap implementation...
     // Fetch the corresponding Q&A document
     LocalStorageServiceInterface localStorageService = getLocalStorageService();
-    ;
+
     setState(() => _isLoading = true);
     try {
       List<QueryDocumentSnapshot> qaDocs = await getDocumentsByFields(

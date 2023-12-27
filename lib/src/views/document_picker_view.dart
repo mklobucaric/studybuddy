@@ -33,8 +33,7 @@ class _DocumentPickerViewState extends State<DocumentPickerView> {
               },
               child: const Text('Study Buddy'),
             ),
-            Text(localizations?.translate('pickDocumentsTitle') ??
-                'Pick Documents')
+            Text(localizations?.translate('pickDocumentsTitle') ?? 'Pick Docs')
           ],
         ),
       ),
