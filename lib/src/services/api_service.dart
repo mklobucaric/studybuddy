@@ -1,9 +1,9 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
 import 'package:studybuddy/src/services/local_storage_service_interface.dart';
+import 'package:studybuddy/src/controllers/authentication_controller.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -12,14 +12,14 @@ class ApiService {
   final String _baseUrl =
       'https://your-backend-api.com'; // Replace with your actual API URL
   LocalStorageServiceInterface localStorageService = getLocalStorageService();
+  final AuthenticationController _authController = AuthenticationController();
   // Function to upload documents
   Future<bool> uploadDocumentsFromDirectory(
       String directoryPath, String languageCode) async {
     // Assuming directoryPath is the path to the directory containing the photos
 
     final uri = Uri.parse('$_baseUrl/api/upload');
-    String? firebaseToken =
-        await FirebaseAuth.instance.currentUser?.getIdToken();
+    String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
       // Handle the case when token is null
@@ -75,8 +75,7 @@ class ApiService {
       List<PlatformFile> files, String languageCode) async {
     LocalStorageServiceInterface localStorageService = getLocalStorageService();
     final uri = Uri.parse('$_baseUrl/api/upload');
-    String? firebaseToken =
-        await FirebaseAuth.instance.currentUser?.getIdToken();
+    String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
       // Handle the case when token is null
@@ -129,8 +128,7 @@ class ApiService {
     final uri = Uri.parse(
         '$_baseUrl/api/question'); // Replace with your actual endpoint
 
-    String? firebaseToken =
-        await FirebaseAuth.instance.currentUser?.getIdToken();
+    String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
       // Handle the case when token is null
@@ -176,8 +174,7 @@ class ApiService {
     final uri = Uri.parse(
         '$_baseUrl/api/custom_question'); // Replace with your actual endpoint
 
-    String? firebaseToken =
-        await FirebaseAuth.instance.currentUser?.getIdToken();
+    String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
       // Handle the case when token is null

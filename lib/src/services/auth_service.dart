@@ -144,22 +144,24 @@ class AuthService {
     }
   }
 
-  void checkUserPermissions() async {
+  // Check user permissions and return the ID token if they are an admin or subscriber
+  Future<String?> checkUserPermissions() async {
     User? user = _firebaseAuth.currentUser;
-    if (user != null) {
-      IdTokenResult tokenResult = await user.getIdTokenResult(true);
-      Map<String, dynamic>? claims = tokenResult.claims;
-
-      if (claims != null) {
-        // Check for specific claims
-        if (claims['admin'] == true) {
-          // Grant admin permissions
-        }
-      } else {
-        print("Claims are null");
-      }
-    } else {
+    if (user == null) {
       print("User is null");
+      return null;
+    }
+
+    IdTokenResult tokenResult = await user.getIdTokenResult(true);
+    Map<String, dynamic>? claims = tokenResult.claims;
+
+    if (claims != null &&
+        (claims['admin'] == true || claims['subscriber'] == true)) {
+      return tokenResult
+          .token; // Return the token if the user is an admin or a subscriber
+    } else {
+      print("User does not have the required role");
+      return null;
     }
   }
 
@@ -200,6 +202,20 @@ class AuthService {
         );
       },
     );
+  }
+
+  Future<String?> checkPermissionsAndGetToken(User user) async {
+    IdTokenResult tokenResult = await user.getIdTokenResult(true);
+    Map<String, dynamic>? claims = tokenResult.claims;
+
+    if (claims != null &&
+        (claims['role'] == 'admin' || claims['role'] == 'subscriber')) {
+      return tokenResult
+          .token; // Return the token if the user has the required role
+    } else {
+      print("User does not have the required role");
+      return null;
+    }
   }
 
   // Check if User is Logged In

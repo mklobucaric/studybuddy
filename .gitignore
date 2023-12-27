@@ -44,3 +44,5 @@ doc/api/
 .flutter-plugins-dependencies
 
 .env
+firebase.json
+.firebaserc

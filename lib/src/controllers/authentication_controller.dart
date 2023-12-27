@@ -101,5 +101,13 @@ class AuthenticationController with ChangeNotifier {
     }
   }
 
+  Future<String?> getValidTokenForApiCall() async {
+    if (_currentUser == null) {
+      print("User is null");
+      return null;
+    }
+    return await _authService.checkPermissionsAndGetToken(_currentUser!);
+  }
+
   // Implement additional authentication methods as needed
 }
