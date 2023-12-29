@@ -1,10 +1,13 @@
+import 'package:studybuddy/src/utils/platform_check.dart';
+
 class Constants {
   // API Endpoints
-  static const String apiBaseUrl = 'https://yourapi.domain.com';
+  static String apiBaseUrl = getBaseUrl();
 //  static const String loginEndpoint = '$apiBaseUrl/login';
 //  static const String registerEndpoint = '$apiBaseUrl/register';
-  static const String questionsEndpoint = '$apiBaseUrl/questions';
-  static const String uploadDocumentEndpoint = '$apiBaseUrl/upload';
+  static String uploadDocumentsEndpoint = '$apiBaseUrl/api/upload';
+  static String sendQGetAEndpoint = '$apiBaseUrl/api/question';
+  static String sendCustomQGetAEndpoint = '$apiBaseUrl/api/custom_question';
 
   // Local Storage Keys
   static const String authTokenKey = 'auth_token';

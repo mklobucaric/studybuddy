@@ -4,13 +4,12 @@ import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
 import 'package:studybuddy/src/services/local_storage_service_interface.dart';
 import 'package:studybuddy/src/controllers/authentication_controller.dart';
+import 'package:studybuddy/src/utils/constants.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
 class ApiService {
-  final String _baseUrl =
-      'https://your-backend-api.com'; // Replace with your actual API URL
   LocalStorageServiceInterface localStorageService = getLocalStorageService();
   final AuthenticationController _authController = AuthenticationController();
   // Function to upload documents
@@ -18,7 +17,7 @@ class ApiService {
       String directoryPath, String languageCode) async {
     // Assuming directoryPath is the path to the directory containing the photos
 
-    final uri = Uri.parse('$_baseUrl/api/upload');
+    final uri = Uri.parse(Constants.uploadDocumentsEndpoint);
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
@@ -74,7 +73,7 @@ class ApiService {
   Future<bool> uploadDocuments(
       List<PlatformFile> files, String languageCode) async {
     LocalStorageServiceInterface localStorageService = getLocalStorageService();
-    final uri = Uri.parse('$_baseUrl/api/upload');
+    final uri = Uri.parse(Constants.uploadDocumentsEndpoint);
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
@@ -90,35 +89,61 @@ class ApiService {
     });
 
     for (var file in files) {
-      request.files.add(http.MultipartFile.fromBytes(
-        'files',
-        file.bytes!,
-        filename: file.name,
-      ));
+      if (file.bytes == null) {
+        final fileBytes = await File(file.path!).readAsBytes();
+        request.files.add(http.MultipartFile.fromBytes(
+          'files',
+          fileBytes,
+          filename: file.name,
+        ));
+      } else {
+        request.files.add(http.MultipartFile.fromBytes(
+          'files',
+          file.bytes!,
+          filename: file.name,
+        ));
+      }
     }
 
-    var response = await request.send();
+    try {
+      var response = await request.send();
 
-    if (response.statusCode == 200) {
-      // Get the response body
-      final responseString = await response.stream.bytesToString();
+      if (response.statusCode == 200) {
+        // Get the response body
+        final responseString = await response.stream.bytesToString();
 
-      // Parse the response body
-      final jsonResponse = json.decode(responseString);
+        // Parse the response body
+        final jsonResponse = json.decode(responseString);
 
-      // Convert JSON to QAContent object
-      QAContent qaContent = QAContent.fromJson(jsonResponse);
+        // Convert JSON to QAContent object
+        QAContent qaContent = QAContent.fromJson(jsonResponse);
 
-      // Save the QAContent object locally
-      try {
-        await localStorageService.saveQAContent(qaContent);
-        return true;
-      } catch (e) {
-        print('Error saving QA pairs: $e');
+        // Save the QAContent object locally
+        try {
+          await localStorageService.saveQAContent(qaContent);
+          return true;
+        } catch (e) {
+          print('Error saving QA pairs: $e');
+          return false;
+        }
+      } else {
+        // Handle different status codes or a general error
+        print('Request failed with status: ${response.statusCode}.');
+        final responseString = await response.stream.bytesToString();
+        print('Response body: $responseString');
         return false;
       }
-    } else {
-      // Handle error
+    } on SocketException catch (e) {
+      print('No Internet connection: $e');
+      return false;
+    } on HttpException catch (e) {
+      print('Could not find the post: $e');
+      return false;
+    } on FormatException catch (e) {
+      print('Bad response format: $e');
+      return false;
+    } catch (e) {
+      print('Unexpected error: $e');
       return false;
     }
   }
@@ -126,7 +151,7 @@ class ApiService {
   Future<String> sendQuestionAndGetAnswer(List<Map<String, String>> messages,
       String languageCode, QAContent qaContent, String question) async {
     final uri = Uri.parse(
-        '$_baseUrl/api/question'); // Replace with your actual endpoint
+        Constants.sendQGetAEndpoint); // Replace with your actual endpoint
 
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
@@ -172,7 +197,7 @@ class ApiService {
   Future<String> sendCustomQuestionAndGetAnswer(
       List<Map<String, String>> messages, String languageCode) async {
     final uri = Uri.parse(
-        '$_baseUrl/api/custom_question'); // Replace with your actual endpoint
+        Constants.sendCustomQGetAEndpoint); // Replace with your actual endpoint
 
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
@@ -207,8 +232,5 @@ class ApiService {
     }
   }
 }
-
-
-
-  // Additional API methods as needed
+// Additional API methods as needed
 
