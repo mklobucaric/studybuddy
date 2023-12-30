@@ -148,8 +148,11 @@ class ApiService {
     }
   }
 
-  Future<String> sendQuestionAndGetAnswer(List<Map<String, String>> messages,
-      String languageCode, QAContent qaContent, String question) async {
+  Future<List<Map<String, String>>> sendQuestionAndGetAnswer(
+      List<Map<String, String>> messages,
+      String languageCode,
+      QAContent qaContent,
+      String question) async {
     final uri = Uri.parse(
         Constants.sendQGetAEndpoint); // Replace with your actual endpoint
 
@@ -180,11 +183,12 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        // Assuming the backend returns the new answer as part of the response
-        // Adjust the below line according to your actual response structure
-        String newAnswer = data['new_answer'];
-        return newAnswer;
+        List<dynamic> backendMessages = json.decode(response.body);
+        List<Map<String, String>> stringMapList = backendMessages.map((item) {
+          // Ensure each item is indeed a Map and then cast it
+          return Map<String, String>.from(item as Map);
+        }).toList();
+        return stringMapList;
       } else {
         throw Exception('Failed to load data');
       }

@@ -36,10 +36,12 @@
     "questionsTitle": "Q&A",
     "customQuestionsTitle": "Pitanja",
     "selectDocuments": "Odaberite dokumente",
-    "pickDocumentsTitle": "Odaberite dokumente",
+    "pickDocumentsTitle": "Odaberite",
     "askFollowUpQuestionLabel": "Postavite slijedeće pitanje.",
     "uploadDocuments": "Pošaljite dokumente",
     "additionalquestionsTitle": "Pitanja",
     "cameraNotAvailable": "Kamera nije dostupna",
-    "noDataMessage": "Nema dostupnih QA sadržaja"
+    "noDataMessage": "Nema dostupnih QA sadržaja",
+    "qaHistory": "QA Povijest",
+    "briefSummary": "Kratki sažetak"
 }

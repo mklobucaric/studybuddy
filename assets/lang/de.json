@@ -11,7 +11,7 @@
     "questions": "Fragen anzeigen",
     "upload_documents": "Dokumente hochladen",
     "pick_documents": "Wählen Sie Dokumente aus",
-    "take_photo": "Foto machen",
+    "take_photo": "Foto",
     "submit_question": "Frage stellen",
     "no_questions_available": "Keine Fragen verfügbar.",
     "loading": "Laden...",
@@ -36,10 +36,12 @@
     "questionsTitle": "Q&A",
     "customQuestionsTitle": "Fragen",
     "selectDocuments": "Dokumente auswählen",
-    "pickDocumentsTitle": "Dokumente auswählen",
+    "pickDocumentsTitle": "Auswählen",
     "askFollowUpQuestionLabel": "Stellen Sie eine Folgefrage.",
     "uploadDocuments": "Dokumente hochladen",
     "additionalquestionsTitle": "Fragen",
     "cameraNotAvailable": "Kamera nicht verfügbar",
-    "noDataMessage": "Keine QA-Inhalte verfügbar"
+    "noDataMessage": "Keine QA-Inhalte verfügbar",
+    "qaHistory": "QA-Geschichte",
+    "briefSummary": "Kurze Zusammenfassung"
 }

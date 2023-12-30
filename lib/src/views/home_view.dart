@@ -23,6 +23,7 @@ class _HomeViewState extends State<HomeView> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = false;
   List<HistoryItem> _historyItems = [];
+  int? expandedHistoryIndex;
 
   @override
   void initState() {
@@ -175,32 +176,75 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildHistoryDrawer() {
+    var localizations = AppLocalizations.of(context);
     return Drawer(
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(
-                      16.0), // You can adjust the padding as needed
-                  // color: Theme.of(context)
-                  //     .primaryColor, // Optional: to style the header container
-                  child: const Text(
-                    'Q&A History',
-                    style: TextStyle(
-                      fontSize: 24.0, // You can adjust the font size as needed
-                      //  color: Colors
-                      //      .white, // Choose a text color that contrasts with the container color
+      child: Container(
+        color: Theme.of(context)
+            .scaffoldBackgroundColor, // Use the theme's background color
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  // Title for the Drawer
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 40.0, bottom: 16.0, right: 16.0, left: 16.0),
+                    child: Text(
+                      localizations?.translate('qaHistory') ?? 'Q&A History',
+                      style: const TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                ..._historyItems.map((item) => ListTile(
-                      title: Text(item.topic),
-                      subtitle: Text('${item.briefSummary}\n${item.date}'),
-                      onTap: () => _onHistoryItemTap(item),
-                    )),
-              ],
+                  // List of History Items
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero, // Removes default padding
+                      itemCount: _historyItems.length,
+                      itemBuilder: (context, index) {
+                        return _buildHistoryItem(_historyItems[index], index);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _buildHistoryItem(HistoryItem item, int index) {
+    var localizations = AppLocalizations.of(context);
+    bool isExpanded = index == expandedHistoryIndex;
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: Text('${item.date}\n${item.topic}'),
+            onTap: () => _onHistoryItemTap(item),
+          ),
+          GestureDetector(
+            onTap: () => setState(() {
+              expandedHistoryIndex = isExpanded ? null : index;
+            }),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 4.0, bottom: 4.0, right: 4.0, left: 14.0),
+              child: isExpanded
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(item.briefSummary),
+                    )
+                  : Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(localizations?.translate('briefSummary') ??
+                          'Brief Summary'),
+                    ),
             ),
+          ),
+        ],
+      ),
     );
   }
 

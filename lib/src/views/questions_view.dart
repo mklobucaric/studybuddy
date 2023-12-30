@@ -108,10 +108,6 @@ class _QuestionsViewState extends State<QuestionsView> {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(qaContent!.briefSummary),
-        ),
         Expanded(
           child: ListView.builder(
             itemCount: qaContent!.qaPairs.length,

@@ -11,7 +11,7 @@
     "questions": "Kérdések",
     "upload_documents": "Dokumentumok feltöltése",
     "pick_documents": "Válassza ki a dokumentumokat",
-    "take_photo": "Kérdezések megtekintése",
+    "take_photo": "Fotó",
     "submit_question": "Tegyen fel egy kérdést",
     "no_questions_available": "Nincsenek elérhető kérdések.",
     "loading": "Betöltés...",
@@ -36,10 +36,12 @@
     "questionsTitle": "Q&A",
     "customQuestionsTitle": "Kérdések",
     "selectDocuments": "Dokumentumok kiválasztása",
-    "pickDocumentsTitle": "Válasszon dokumentumokat",
+    "pickDocumentsTitle": "Válasszon",
     "askFollowUpQuestionLabel": "Tegyen fel egy további kérdést.",
     "uploadDocuments": "Dokumentumok feltöltése",
     "additionalquestionsTitle": "Kérdések",
     "cameraNotAvailable": "A kamera nem érhető el",
-    "noDataMessage": "Nincs QA tartalom elérhető"
+    "noDataMessage": "Nincs QA tartalom elérhető",
+    "qaHistory": "QA-történelem",
+    "briefSummary": "Rövid összefoglalás"
 }

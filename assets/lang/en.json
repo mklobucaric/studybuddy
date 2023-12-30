@@ -41,6 +41,9 @@
     "uploadDocuments": "Upload Documents",
     "additionalquestionsTitle": "Questions",
     "cameraNotAvailable": "Camera not available",
-    "noDataMessage": "No QA content available"
+    "noDataMessage": "No QA content available",
+    "qaHistory": "QA History",
+    "briefSummary": "Brief Summary"
+
 }
 
