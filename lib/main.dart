@@ -28,7 +28,7 @@ void main() async {
   await FirebaseAppCheck.instance.activate(
     webProvider: ReCaptchaV3Provider(dotenv.env['RECAPTCHA_SITE_KEY']!),
     // Configure the preferred Android provider for app integrity checks.
-    androidProvider: AndroidProvider.debug,
+    androidProvider: AndroidProvider.playIntegrity,
   );
 
   // Run the Flutter application with the necessary providers.
