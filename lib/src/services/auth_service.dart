@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,11 +7,22 @@ import 'package:studybuddy/src/models/user.dart';
 import 'package:studybuddy/src/utils/dialog_utils.dart';
 
 class AuthService {
+  // Firebase Authentication instance
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // Firestore instance for database operations
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // Google Sign-In instance
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // User Registration with Email and Password
+  // Check if User is Logged In
+  User? get currentUser => _firebaseAuth.currentUser;
+
+  /// Registers a user with email and password, and optionally links a Google account.
+  ///
+  /// [context] is used for UI interaction like prompting for Google link.
+  /// [email] and [password] are credentials for registration.
+  ///
+  /// Returns the newly created `User` object or `null` on failure.
   Future<User?> registerWithEmailPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -18,17 +30,18 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
 
-      // Prompt user to sign in with Google
-      // This can be a UI prompt/option
+      // Delay for UI prompt simulation
       await Future.delayed(const Duration(seconds: 1));
 
-      // Check if the context is still valid
+      // Context validation check
       if (!context.mounted) return null;
+
+      // Prompt for linking with Google account
       bool shouldLinkGoogle =
-          await promptUserForGoogleLink(context); // Implement this
+          await promptUserForGoogleLink(context); // Needs implementation
 
       if (shouldLinkGoogle) {
-        // Start Google sign-in process
+        // Google Sign-In process
         final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
         if (googleUser == null) return null;
 
@@ -43,13 +56,10 @@ class AuthService {
         try {
           await user?.linkWithCredential(credential);
         } on FirebaseAuthException catch (e) {
-          // Handle different error scenarios
-          // For example, show an error message to the user
+          // Error handling for account linking
           await Future.delayed(const Duration(seconds: 1));
-
-          // Check if the context is still valid
           if (!context.mounted) return null;
-          handleLinkingError(context, e); // Implement this
+          handleLinkingError(context, e); // Needs implementation
         }
       }
 
@@ -57,29 +67,43 @@ class AuthService {
     } on FirebaseAuthException {
       rethrow;
     } catch (e) {
-      print(e); // Handle the error properly
+      if (kDebugMode) {
+        print(e); // Proper error handling should be implemented
+      }
+
       return null;
     }
   }
 
-  // User Login with Email and Password
+  /// Logs in a user using email and password.
+  ///
+  /// [email] and [password] are credentials for login.
+  ///
+  /// Returns the `User` object on successful login, or `null` on failure.
   Future<User?> loginWithEmailPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
     } catch (e) {
-      print(e); // Handle the error properly
+      if (kDebugMode) {
+        print(e); // Proper error handling should be implemented
+      }
+
       return null;
     }
   }
 
-  // User Logout
+  /// Logs out the currently signed-in user.
   Future<void> logout() async {
     await _firebaseAuth.signOut();
   }
 
-  // User Login with Google
+  /// Signs in a user using Google authentication.
+  ///
+  /// [context] is used for potential UI interactions during the process.
+  ///
+  /// Returns the `User` object on successful login, or `null` on failure.
   Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -93,78 +117,82 @@ class AuthService {
       );
       UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(credential);
-      return userCredential.user; // Return the user after linking
-    }
+      return userCredential.user;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e); // Proper error handling should be implemented
+      }
 
-    // UserCredential userCredential =
-    //     await _firebaseAuth.signInWithCredential(credential);
-    // return userCredential.user;
-    catch (e) {
-      print(e); // Handle the error properly
       return null;
     }
   }
 
+  /// Fetches user data from Firestore based on the provided user ID.
+  ///
+  /// [userId] is the identifier of the user.
+  ///
+  /// Returns a `UserJson` object on success, or `null` if the user doesn't exist.
   Future<UserJson?> fetchUserData(String userId) async {
     var userDoc = await _firestore.collection('users').doc(userId).get();
     if (userDoc.exists) {
       return UserJson.fromJson(
-          userDoc.data()!); // Assuming 'UserJson' is your model class
+          userDoc.data()!); // 'UserJson' needs to be defined
     } else {
-      // User document does not exist
-      return null; // or throw a custom exception if you prefer
+      return null; // Handle non-existence of user data appropriately
     }
   }
 
-  // Future<UserJson> fetchUserData(String userId) async {
-  //   var userDoc = await _firestore.collection('users').doc(userId).get();
-  //   return UserJson.fromJson(
-  //       userDoc.data()!); // Assuming 'UserJson' is your model class
-  // }
-
-// Function to check and store user data in Firestore
+  /// Checks and stores user data in Firestore.
+  ///
+  /// [user] is the `User` object containing the user's information.
+  ///
+  /// Ensures user data is stored in Firestore if it doesn't already exist.
   Future<void> checkAndStoreUserData(User user) async {
     final usersCollection = _firestore.collection('users');
 
     final userDoc = await usersCollection.doc(user.uid).get();
-    print(userDoc.id);
 
     if (!userDoc.exists) {
-      // If user data doesn't exist, store it in Firestore
+      // Storing user data in Firestore
       await usersCollection.doc(user.uid).set({
         'id': user.uid,
         'firstName': user.displayName
             ?.split(' ')
-            .first, // Assuming first part is the first name
+            .first, // Assumes first part is the first name
         'lastName': user.displayName
             ?.split(' ')
-            .last, // Assuming second part is the last name
+            .last, // Assumes second part is the last name
         'email': user.email,
       });
     }
   }
 
-  // Check user permissions and return the ID token if they are an admin or subscriber
-  Future<String?> checkUserPermissions() async {
-    User? user = _firebaseAuth.currentUser;
-    if (user == null) {
-      print("User is null");
-      return null;
-    }
-
+  /// Checks user permissions and returns their ID token if they are an admin or subscriber.
+  ///
+  /// Returns the ID token for users with 'admin' or 'subscriber' roles, or `null` otherwise.
+  Future<String?> checkPermissionsAndGetToken(User user) async {
     IdTokenResult tokenResult = await user.getIdTokenResult(true);
     Map<String, dynamic>? claims = tokenResult.claims;
 
     if (claims != null &&
-        (claims['admin'] == true || claims['subscriber'] == true)) {
+        (claims['role'] == 'admin' || claims['role'] == 'subscriber')) {
       return tokenResult
-          .token; // Return the token if the user is an admin or a subscriber
+          .token; // Return the token if the user has the required role
     } else {
-      print("User does not have the required role");
+      if (kDebugMode) {
+        print("User does not have the required role");
+      }
+
       return null;
     }
   }
 
+  /// Handles errors that occur during account linking.
+  ///
+  /// [context] is the BuildContext for UI interactions.
+  /// [e] is the FirebaseAuthException that occurred.
+  ///
+  /// Displays an error message based on the exception code.
   void handleLinkingError(BuildContext context, FirebaseAuthException e) {
     String errorMessage;
 
@@ -180,13 +208,14 @@ class AuthService {
         break;
       default:
         errorMessage = "An unknown error occurred.";
-        print(e.toString()); // Optionally log the error for debugging
+        if (kDebugMode) {
+          print(e.toString()); // Optional error logging
+        }
     }
 
-    // Display the error message
-    // Here, we are using a simple dialog, but you can use any method you prefer
+    // UI to display the error message
     showDialog(
-      context: context, // Ensure you have a BuildContext available
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Error Linking Account'),
@@ -195,7 +224,7 @@ class AuthService {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -204,22 +233,5 @@ class AuthService {
     );
   }
 
-  Future<String?> checkPermissionsAndGetToken(User user) async {
-    IdTokenResult tokenResult = await user.getIdTokenResult(true);
-    Map<String, dynamic>? claims = tokenResult.claims;
-
-    if (claims != null &&
-        (claims['role'] == 'admin' || claims['role'] == 'subscriber')) {
-      return tokenResult
-          .token; // Return the token if the user has the required role
-    } else {
-      print("User does not have the required role");
-      return null;
-    }
-  }
-
-  // Check if User is Logged In
-  User? get currentUser => _firebaseAuth.currentUser;
-
-  // Implement additional authentication methods as needed
+  // Additional methods and comments can be added here.
 }

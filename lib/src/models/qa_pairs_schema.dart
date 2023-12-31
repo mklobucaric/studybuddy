@@ -1,12 +1,22 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-
+/// Represents a single Question-Answer pair.
+///
+/// This class is designed to encapsulate a question and its corresponding answer,
+/// along with an identifying number for easy referencing.
 class QAPair {
   final int number;
   final String question;
   final String answer;
 
+  /// Constructor for creating a new QAPair.
+  ///
+  /// Requires a unique identifier [number], a [question], and an [answer].
   QAPair({required this.number, required this.question, required this.answer});
 
+  /// Factory constructor to create a new QAPair from a JSON object.
+  ///
+  /// Useful for deserializing data from formats such as database records or API responses.
+  ///
+  /// [json] - A map representing the JSON object from which to create the QAPair.
   factory QAPair.fromJson(Map<String, dynamic> json) {
     return QAPair(
       number: json['number'],
@@ -15,6 +25,9 @@ class QAPair {
     );
   }
 
+  /// Converts a QAPair instance into a JSON object.
+  ///
+  /// Useful for serializing data to formats such as database records or API requests.
   Map<String, dynamic> toJson() {
     return {
       'number': number,
@@ -24,6 +37,10 @@ class QAPair {
   }
 }
 
+/// Represents the content of a QA (Question-Answer) session.
+///
+/// This class encapsulates the details of a QA session, including user information,
+/// session date, topic, a brief summary, language code, and a list of QAPair objects.
 class QAContent {
   final String userID;
   final String date;
@@ -32,6 +49,10 @@ class QAContent {
   final String languageCode;
   final List<QAPair> qaPairs;
 
+  /// Constructor for creating a new QAContent.
+  ///
+  /// Requires user identifier [userID], session [date], [topic], a [briefSummary],
+  /// [languageCode], and a list of [qaPairs].
   QAContent(
       {required this.userID,
       required this.date,
@@ -40,6 +61,11 @@ class QAContent {
       required this.languageCode,
       required this.qaPairs});
 
+  /// Factory constructor to create a new QAContent from a JSON object.
+  ///
+  /// Useful for deserializing data from formats such as database records or API responses.
+  ///
+  /// [json] - A map representing the JSON object from which to create the QAContent.
   factory QAContent.fromJson(Map<String, dynamic> json) {
     return QAContent(
       userID: json['user_id'],
@@ -53,16 +79,9 @@ class QAContent {
     );
   }
 
-  // Constructor for creating an instance from Firestore document
-  // QAContent.fromFirestore(DocumentSnapshot doc)
-  //     : userID = doc['user_id'],
-  //       date = doc['date'],
-  //       topic = doc['topic'],
-  //       briefSummary = doc['brief_summary'],
-  //       languageCode = doc['language_code'],
-  //       qaPairs =
-  //           (doc['qa_pairs'] as List).map((e) => QAPair.fromJson(e)).toList();
-
+  /// Converts a QAContent instance into a JSON object.
+  ///
+  /// Useful for serializing data to formats such as database records or API requests.
   Map<String, dynamic> toJson() {
     return {
       'user_id': userID,

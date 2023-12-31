@@ -46,3 +46,6 @@ doc/api/
 .env
 firebase.json
 .firebaserc
+devtools_options.yaml
+package-lock.json
+

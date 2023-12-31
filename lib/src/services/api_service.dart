@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
@@ -10,29 +11,34 @@ import 'dart:async';
 import 'dart:io';
 
 class ApiService {
+  // Service for interacting with local storage
   LocalStorageServiceInterface localStorageService = getLocalStorageService();
+  // Controller for handling authentication
   final AuthenticationController _authController = AuthenticationController();
-  // Function to upload documents
+
+  /// Uploads documents from a specified directory to a server.
+  ///
+  /// [directoryPath] specifies the local directory path containing the documents.
+  /// [languageCode] is used for the 'Accept-Language' header in the request.
+  ///
+  /// Returns `true` if the upload is successful, `false` otherwise.
+  /// Throws an Exception if the Firebase token is null.
   Future<bool> uploadDocumentsFromDirectory(
       String directoryPath, String languageCode) async {
-    // Assuming directoryPath is the path to the directory containing the photos
-
     final uri = Uri.parse(Constants.uploadDocumentsEndpoint);
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
-      // Handle the case when token is null
-      // For example: throw an error, or return early
       throw Exception('Firebase token is null');
     }
+
     var request = http.MultipartRequest('POST', uri);
-    // Use the current locale from LocaleProvider
     request.headers.addAll({
       'Accept-Language': languageCode,
       'Authorization': 'Bearer $firebaseToken'
     });
 
-    // Add files to the request
+    // Adding files from the directory to the request
     Directory(directoryPath).listSync().forEach((item) {
       if (item is File) {
         request.files.add(http.MultipartFile.fromBytes(
@@ -43,42 +49,40 @@ class ApiService {
       }
     });
 
-    // Send the request to the server
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      // Get the response body
       final responseString = await response.stream.bytesToString();
-
-      // Parse the response body
       final jsonResponse = json.decode(responseString);
-
-      // Convert JSON to QAContent object
       QAContent qaContent = QAContent.fromJson(jsonResponse);
 
-      // Save the QAContent object locally
       try {
         await localStorageService.saveQAContent(qaContent);
         return true;
       } catch (e) {
-        print('Error saving QA pairs: $e');
+        if (kDebugMode) {
+          print('Error saving QA pairs: $e');
+        }
         return false;
       }
     } else {
-      // Handle error
-      return false;
+      return false; // Error handling for unsuccessful upload
     }
   }
 
+  /// Uploads a list of documents represented by `PlatformFile` objects.
+  ///
+  /// [files] is a list of `PlatformFile` objects to be uploaded.
+  /// [languageCode] is used for the 'Accept-Language' header in the request.
+  ///
+  /// Returns `true` if the upload is successful, `false` otherwise.
+  /// Handles various network and file-related exceptions.
   Future<bool> uploadDocuments(
       List<PlatformFile> files, String languageCode) async {
-    LocalStorageServiceInterface localStorageService = getLocalStorageService();
     final uri = Uri.parse(Constants.uploadDocumentsEndpoint);
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
-      // Handle the case when token is null
-      // For example: throw an error, or return early
       throw Exception('Firebase token is null');
     }
 
@@ -88,6 +92,7 @@ class ApiService {
       'Authorization': 'Bearer $firebaseToken'
     });
 
+    // Adding files to the request
     for (var file in files) {
       if (file.bytes == null) {
         final fileBytes = await File(file.path!).readAsBytes();
@@ -109,60 +114,63 @@ class ApiService {
       var response = await request.send();
 
       if (response.statusCode == 200) {
-        // Get the response body
         final responseString = await response.stream.bytesToString();
-
-        // Parse the response body
         final jsonResponse = json.decode(responseString);
-
-        // Convert JSON to QAContent object
         QAContent qaContent = QAContent.fromJson(jsonResponse);
 
-        // Save the QAContent object locally
         try {
           await localStorageService.saveQAContent(qaContent);
           return true;
         } catch (e) {
-          print('Error saving QA pairs: $e');
+          if (kDebugMode) {
+            print('Error saving QA pairs: $e');
+          }
+
           return false;
         }
       } else {
-        // Handle different status codes or a general error
-        print('Request failed with status: ${response.statusCode}.');
+        if (kDebugMode) {
+          print('Request failed with status: ${response.statusCode}.');
+        }
+
         final responseString = await response.stream.bytesToString();
-        print('Response body: $responseString');
+        if (kDebugMode) {
+          print('Response body: $responseString');
+        }
+
         return false;
       }
-    } on SocketException catch (e) {
-      print('No Internet connection: $e');
-      return false;
-    } on HttpException catch (e) {
-      print('Could not find the post: $e');
-      return false;
-    } on FormatException catch (e) {
-      print('Bad response format: $e');
-      return false;
     } catch (e) {
-      print('Unexpected error: $e');
+      if (kDebugMode) {
+        print('Error handling for various exceptions');
+      }
+
       return false;
     }
   }
 
+  /// Sends a question along with additional information and retrieves the answer.
+  ///
+  /// [messages] is a list of Map<String, String> representing previous interactions.
+  /// [languageCode] is used for the 'Accept-Language' header in the request.
+  /// [qaContent] contains the date, topic, and brief summary of the QA context.
+  /// [question] is the user's query.
+  ///
+  /// Returns a list of Map<String, String> with the answer(s) from the backend.
+  /// Throws an Exception if the Firebase token is null or if the request fails.
   Future<List<Map<String, String>>> sendQuestionAndGetAnswer(
       List<Map<String, String>> messages,
       String languageCode,
       QAContent qaContent,
       String question) async {
-    final uri = Uri.parse(
-        Constants.sendQGetAEndpoint); // Replace with your actual endpoint
+    final uri = Uri.parse(Constants.sendQGetAEndpoint);
 
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
-      // Handle the case when token is null
-      // For example: throw an error, or return early
       throw Exception('Firebase token is null');
     }
+
     try {
       var response = await http.post(
         uri,
@@ -184,32 +192,34 @@ class ApiService {
 
       if (response.statusCode == 200) {
         List<dynamic> backendMessages = json.decode(response.body);
-        List<Map<String, String>> stringMapList = backendMessages.map((item) {
-          // Ensure each item is indeed a Map and then cast it
-          return Map<String, String>.from(item as Map);
-        }).toList();
-        return stringMapList;
+        return backendMessages
+            .map((item) => Map<String, String>.from(item as Map))
+            .toList();
       } else {
         throw Exception('Failed to load data');
       }
     } catch (e) {
-      // Handle the error appropriately
       throw Exception('Error sending question: $e');
     }
   }
 
+  /// Sends custom question data and retrieves a corresponding answer.
+  ///
+  /// [messages] is a list of Map<String, String> representing user interactions.
+  /// [languageCode] is used for the 'Accept-Language' header in the request.
+  ///
+  /// Returns a String containing the answer or response from the backend.
+  /// Throws an Exception if the Firebase token is null or if the request fails.
   Future<String> sendCustomQuestionAndGetAnswer(
       List<Map<String, String>> messages, String languageCode) async {
-    final uri = Uri.parse(
-        Constants.sendCustomQGetAEndpoint); // Replace with your actual endpoint
+    final uri = Uri.parse(Constants.sendCustomQGetAEndpoint);
 
     String? firebaseToken = await _authController.getValidTokenForApiCall();
 
     if (firebaseToken == null) {
-      // Handle the case when token is null
-      // For example: throw an error, or return early
       throw Exception('Firebase token is null');
     }
+
     try {
       var response = await http.post(
         uri,
@@ -223,18 +233,18 @@ class ApiService {
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        // Assuming the backend returns the new answer as part of the response
-        // Adjust the below line according to your actual response structure
-        String newAnswer = data['new_answer'];
+        String newAnswer =
+            data['new_answer']; // Assuming this key holds the answer
         return newAnswer;
       } else {
         throw Exception('Failed to load data');
       }
     } catch (e) {
-      // Handle the error appropriately
       throw Exception('Error sending question: $e');
     }
   }
-}
-// Additional API methods as needed
 
+  // The methods `sendQuestionAndGetAnswer` and `sendCustomQuestionAndGetAnswer`
+  // can be similarly annotated with comments and docstrings.
+  // Additional API methods and comments can be added here.
+}

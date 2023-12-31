@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:studybuddy/src/models/qa_pairs_schema.dart';
 import 'package:studybuddy/src/services/api_service.dart';
@@ -8,31 +9,38 @@ import 'package:provider/provider.dart';
 import 'package:studybuddy/src/services/local_storage_service.dart';
 import 'package:studybuddy/src/services/local_storage_service_interface.dart';
 
+/// A view for displaying and handling additional questions based on initial Q&A pair.
+///
+/// This widget provides an interface for users to ask follow-up questions and view responses.
+/// [initialQAPair] contains the initial question and answer pair to be displayed.
 class AdditionalQuestionsView extends StatefulWidget {
   final QAPair initialQAPair;
 
-  const AdditionalQuestionsView({Key? key, required this.initialQAPair})
-      : super(key: key);
+  const AdditionalQuestionsView({super.key, required this.initialQAPair});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AdditionalQuestionsViewState createState() =>
       _AdditionalQuestionsViewState();
 }
 
 class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
-  final _apiService = ApiService();
-  final TextEditingController _questionController = TextEditingController();
-  List<Map<String, String>> messages = [];
-  QAContent? qaContent;
-  bool _isLoading = false;
+  final _apiService = ApiService(); // Service for API interactions
+  final TextEditingController _questionController =
+      TextEditingController(); // Controller for the question input field
+  List<Map<String, String>> messages =
+      []; // List to hold the conversation messages
+  QAContent? qaContent; // Stores the QAContent object
+  bool _isLoading = false; // Flag to indicate loading state
 
   @override
   void initState() {
     super.initState();
-    _initializeMessages();
-    _loadQAPairs();
+    _initializeMessages(); // Initialize conversation messages
+    _loadQAPairs(); // Load QA pairs from local storage
   }
 
+  /// Initializes the messages list with the initial Q&A pair.
   void _initializeMessages() {
     setState(() {
       messages = [
@@ -42,6 +50,10 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
     });
   }
 
+  /// Loads QA pairs from local storage.
+  ///
+  /// Retrieves and sets the QAContent object from local storage.
+  /// Sets the loading state accordingly.
   Future<void> _loadQAPairs() async {
     LocalStorageServiceInterface localStorageService = getLocalStorageService();
     try {
@@ -55,11 +67,17 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
         _isLoading = false;
         // Handle error or set an error flag to display an error message
       });
-      print('Error loading QA pairs: $e');
+      if (kDebugMode) {
+        print('Error loading QA pairs: $e');
+      }
     }
   }
 
-  Future<void> _sendQuestion(context, String languageCode) async {
+  /// Sends the user's question to the backend and updates the conversation.
+  ///
+  /// [context] is the current BuildContext.
+  /// [languageCode] is the current language code for localization.
+  Future<void> _sendQuestion(BuildContext context, String languageCode) async {
     final userQuestion = _questionController.text;
     if (userQuestion.isEmpty) return;
 
@@ -89,6 +107,8 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
   Widget build(BuildContext context) {
     var localizations = AppLocalizations.of(context);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+
+    // Building the UI for the additional questions view
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -96,8 +116,7 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
           children: [
             InkWell(
               onTap: () {
-                // Use go_router to navigate to HomeView
-                GoRouter.of(context).go('/home');
+                GoRouter.of(context).go('/home'); // Navigation to home
               },
               child: const Text('Study Buddy'),
             ),
@@ -108,6 +127,7 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
       ),
       body: Column(
         children: [
+          // Displaying the conversation messages
           Expanded(
             child: ListView.builder(
               itemCount: messages.length,
@@ -121,7 +141,8 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
               },
             ),
           ),
-          if (_isLoading) const LinearProgressIndicator(),
+          if (_isLoading) const LinearProgressIndicator(), // Loading indicator
+          // Input field for asking a follow-up question
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(

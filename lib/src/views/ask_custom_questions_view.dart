@@ -5,25 +5,36 @@ import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+/// A view for users to ask custom questions and view responses.
+///
+/// This widget provides an interface for users to input custom questions,
+/// sends them to the API, and displays the responses.
 class AskCustomQuestionsView extends StatefulWidget {
-  const AskCustomQuestionsView({Key? key}) : super(key: key);
+  const AskCustomQuestionsView({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AskCustomQuestionsViewState createState() => _AskCustomQuestionsViewState();
 }
 
 class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
-  final _apiService = ApiService();
-  final TextEditingController _questionController = TextEditingController();
-  List<Map<String, String>> messages = [];
-  bool _isLoading = false;
+  final _apiService = ApiService(); // Service for API interactions
+  final TextEditingController _questionController =
+      TextEditingController(); // Controller for the question input field
+  List<Map<String, String>> messages =
+      []; // List to hold the conversation messages
+  bool _isLoading = false; // Flag to indicate loading state
 
   @override
   void initState() {
     super.initState();
   }
 
-  Future<void> _sendQuestion(context, String languageCode) async {
+  /// Sends the user's custom question to the backend and updates the conversation.
+  ///
+  /// [context] is the current BuildContext.
+  /// [languageCode] is the current language code for localization.
+  Future<void> _sendQuestion(BuildContext context, String languageCode) async {
     final userQuestion = _questionController.text;
     if (userQuestion.isEmpty) return;
 
@@ -51,9 +62,10 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
 
   @override
   Widget build(BuildContext context) {
-    // Using AppLocalizations to get localized strings
     var localizations = AppLocalizations.of(context);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+
+    // Building the UI for asking custom questions
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -61,8 +73,7 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
           children: [
             InkWell(
               onTap: () {
-                // Use go_router to navigate to HomeView
-                GoRouter.of(context).go('/home');
+                GoRouter.of(context).go('/home'); // Navigation to home
               },
               child: const Text('Study Buddy'),
             ),
@@ -73,6 +84,7 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
       ),
       body: Column(
         children: [
+          // Displaying the conversation messages
           Expanded(
             child: ListView.builder(
               itemCount: messages.length,
@@ -86,7 +98,8 @@ class _AskCustomQuestionsViewState extends State<AskCustomQuestionsView> {
               },
             ),
           ),
-          if (_isLoading) const LinearProgressIndicator(),
+          if (_isLoading) const LinearProgressIndicator(), // Loading indicator
+          // Input field for asking a custom question
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(

@@ -3,8 +3,6 @@ import 'package:studybuddy/src/utils/platform_check.dart';
 class Constants {
   // API Endpoints
   static String apiBaseUrl = getBaseUrl();
-//  static const String loginEndpoint = '$apiBaseUrl/login';
-//  static const String registerEndpoint = '$apiBaseUrl/register';
   static String uploadDocumentsEndpoint = '$apiBaseUrl/api/upload';
   static String sendQGetAEndpoint = '$apiBaseUrl/api/question';
   static String sendCustomQGetAEndpoint = '$apiBaseUrl/api/custom_question';

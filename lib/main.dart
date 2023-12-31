@@ -4,7 +4,6 @@ import 'package:studybuddy/src/controllers/authentication_controller.dart';
 import 'theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-// import 'src/utils/constants.dart';
 import 'src/routing/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:studybuddy/src/utils/localization.dart';
@@ -14,48 +13,56 @@ import 'package:studybuddy/src/states/upload_state.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  // Ensure proper initialization of Flutter bindings.
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Firebase
+
+  // Load environment variables from .env file.
   await dotenv.load(fileName: ".env");
+
+  // Initialize Firebase with the current platform's default options.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Activate Firebase App Check to improve app security.
   await FirebaseAppCheck.instance.activate(
-      // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
-      // argument for `webProvider`
-      webProvider: ReCaptchaV3Provider(dotenv.env['RECAPTCHA_SITE_KEY']!),
-      // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
-      // your preferred provider. Choose from:
-      // 1. Debug provider
-      // 2. Safety Net provider
-      // 3. Play Integrity provider
-      androidProvider: AndroidProvider.debug);
+    webProvider: ReCaptchaV3Provider(dotenv.env['RECAPTCHA_SITE_KEY']!),
+    // Configure the preferred Android provider for app integrity checks.
+    androidProvider: AndroidProvider.debug,
+  );
+
+  // Run the Flutter application with the necessary providers.
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationController()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => UploadState()),
-        // ... other providers
+        // ... other providers as needed
       ],
       child: const MyApp(),
     ),
   );
 }
 
+/// The root widget of the application.
+///
+/// This widget sets up the application's routing, theme, localization, and other
+/// global configurations.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Access the current locale from LocaleProvider.
     final localeProvider = Provider.of<LocaleProvider>(context);
+
     return MaterialApp.router(
       title: 'Kid-Friendly Educational App',
-      theme: AppTheme.lightTheme, // Define your theme in app_theme.dart
+      // Apply the light theme defined in app_theme.dart.
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      //     home: HomeView(), // The initial view of your app.
-      routerConfig: AppRoutes.router,
+      routerConfig: AppRoutes.router, // Define the app routes.
       supportedLocales: const [
         Locale('en', ''), // English
         Locale('de', ''), // German
@@ -64,13 +71,13 @@ class MyApp extends StatelessWidget {
         // Add other supported locales here
       ],
       localizationsDelegates: const [
-        AppLocalizations.delegate, // Your custom delegate
+        AppLocalizations.delegate, // Custom localization delegate
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate, // If using Cupertino widgets
+        GlobalCupertinoLocalizations.delegate, // For Cupertino widgets
       ],
-      locale: localeProvider
-          .currentLocale, // Use the current locale from LocaleProvider
+      locale:
+          localeProvider.currentLocale, // Use the locale from LocaleProvider
       // Other properties...
     );
   }

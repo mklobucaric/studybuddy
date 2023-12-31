@@ -2,23 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:studybuddy/src/utils/localization.dart';
 import 'package:go_router/go_router.dart';
 
+/// A widget that creates an interactive card for use in a Flutter application.
+///
+/// This card typically represents a feature or action in the application. When tapped,
+/// it navigates to a specified destination. It displays an image and a label, which can be localized.
 class InteractiveCard extends StatelessWidget {
+  /// The label text displayed on the card. Used for both display and to fetch the corresponding image.
   final String label;
+
+  /// The navigation destination path when the card is tapped.
   final String destination;
 
+  /// Creates an InteractiveCard widget.
+  ///
+  /// [label] is a string used to display text on the card and to determine the image asset to use.
+  /// [destination] is a string that defines the navigation route to be followed when the card is tapped.
   const InteractiveCard({
-    Key? key,
+    super.key,
     required this.label,
     required this.destination,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    var localizations = AppLocalizations.of(context); // For localized text
+    // Fetch localized text based on the current application context.
+    var localizations = AppLocalizations.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(
-          2.0), // Reduced padding for better space utilization
+      padding: const EdgeInsets.all(2.0),
       child: InkWell(
         onTap: () => context.push(destination),
         child: Card(
@@ -29,7 +40,7 @@ class InteractiveCard extends StatelessWidget {
               Expanded(
                 child: Image.asset(
                   'assets/images/${label}_icon.png',
-                  fit: BoxFit.contain, // Adjust image size within card
+                  fit: BoxFit.contain,
                 ),
               ),
               Padding(
@@ -38,8 +49,7 @@ class InteractiveCard extends StatelessWidget {
                   localizations?.translate(label) ?? 'Default Text',
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight:
-                        FontWeight.bold, // Adjust font size if necessary
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

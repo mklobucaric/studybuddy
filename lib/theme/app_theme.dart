@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
+/// Defines the global theme settings for the application.
+///
+/// This class provides ThemeData configurations that can be applied throughout
+/// the app to ensure consistent styling, including colors, font styles, button themes,
+/// and other UI components.
 class AppTheme {
-  // Light Theme
+  /// Getter for the light theme of the application.
+  ///
+  /// This theme defines the appearance for light mode, including colors, typography,
+  /// button styles, and other UI elements. It uses a combination of blue and orange
+  /// accents, and provides a Poppins font family.
   static ThemeData get lightTheme {
     return ThemeData(
       // Define the default brightness and colors.
@@ -10,11 +19,10 @@ class AppTheme {
       colorScheme:
           ColorScheme.fromSwatch().copyWith(secondary: Colors.orangeAccent),
 
-      // Define the default font family.
-      fontFamily: 'Poppins', // Make sure to add the font in pubspec.yaml
-      //   fontFamily: 'Montserrat', // Make sure to add the font in pubspec.yaml
-      // Define the default TextTheme. Use this to specify the default
-      // text styling for headlines, titles, bodies of text, and more.
+      // Define the default font family. Ensure the font is added in pubspec.yaml.
+      fontFamily: 'Poppins',
+
+      // Define the default TextTheme for text styling.
       textTheme: const TextTheme(
         displayLarge: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
         displayMedium: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
@@ -23,9 +31,8 @@ class AppTheme {
         labelLarge: TextStyle(fontSize: 18.0, color: Colors.white),
       ),
 
-      // Define the default ButtonTheme. Use this to style buttons.
+      // Define the default ButtonTheme for button styling.
       buttonTheme: ButtonThemeData(
-        //buttonColor: Colors.blueAccent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
@@ -33,18 +40,17 @@ class AppTheme {
         textTheme: ButtonTextTheme.primary,
       ),
 
+      // Define the ElevatedButton style.
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          //backgroundColor: Colors.blueAccent, // Background color
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          // other properties like textStyle
         ),
       ),
 
-      // Other customizations like AppBar, FAB
+      // Customizations for the AppBar.
       appBarTheme: const AppBarTheme(
         color: Color.fromARGB(255, 14, 135, 191), // Softer shade of blue
         elevation: 0,
@@ -54,13 +60,12 @@ class AppTheme {
           fontWeight: FontWeight.bold,
         ),
         titleTextStyle: TextStyle(
-          color: Colors.white, // White text for better contrast
+          color: Colors.white,
           fontSize: 22.0,
           fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins', // Keeping the fun and legible font
+          fontFamily: 'Poppins',
           shadows: [
             Shadow(
-              // Shadow for a 3D effect
               offset: Offset(1.0, 1.0),
               blurRadius: 3.0,
               color: Color.fromRGBO(0, 0, 0, 0.3),
@@ -71,5 +76,5 @@ class AppTheme {
     );
   }
 
-  // Add more themes (like darkTheme) if needed
+  // Additional themes like a darkTheme can be added here if needed.
 }
