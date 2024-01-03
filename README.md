@@ -22,14 +22,10 @@ For a guide on using the app, refer to the [User Manual](UserManual.md).
 
 ## App screenshots
 
-<img src="screenshots/home_view.jpg" alt="App home view" width="550"><br>
-<b>Apps Home View</b>
-
-<img src="screenshots/qa.jpg" alt="App questions view" width="550"><br>
-<b>Apps Q&A View</b>
-
-<img src="screenshots/follow_up_questions.jpg" alt="App follow up questions view" width="550"><br>
-<b>Apps Follow-Up Questions View</b>
+<img src="screenshots/home_view.jpg" alt="App home view" width="250">
+<img src="screenshots/qa.jpg" alt="App questions view" width="250">
+<img src="screenshots/follow_up_questions.jpg" alt="App follow up questions view" width="250"><br>
+<b>Apps Home, Q&A and Follow-Up Questions View</b>
 
 ## Backend Integration:
 The app integrates with backend of the Educational Assistant App, visit [Study Buddy Backend](https://github.com/mklobucaric/studybuddy-backend). 
