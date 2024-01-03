@@ -24,8 +24,8 @@ For a guide on using the app, refer to the [User Manual](UserManual.md).
 
 <p float="left">
   <img src="screenshots/home_view.jpg" alt="App home view" width="250" />
-  <img src="screenshots/qa.jpg" alt="App questions view" width="250" />
-  <img src="screenshots/follow_up_questions.jpg" alt="App follow up questions view" width="250" />
+  <img src="screenshots/qa.jpg" alt="App questions view" width="251" />
+  <img src="screenshots/follow_up_questions.jpg" alt="App follow up questions view" width="245" />
 </p>
 <b>Apps Home, Q&A, and Follow-Up Questions View</b>
 
