@@ -154,7 +154,18 @@ class _HomeViewState extends State<HomeView> {
               value: 'en',
               child: Text('English'),
             ),
-            // Add other languages here...
+            const PopupMenuItem<String>(
+              value: 'de',
+              child: Text('Deutsch'),
+            ),
+            const PopupMenuItem<String>(
+              value: 'hr',
+              child: Text('Hrvatski'),
+            ),
+            const PopupMenuItem<String>(
+              value: 'hu',
+              child: Text('Magyar'),
+            ),
           ],
           icon: const Icon(Icons.language),
         ),

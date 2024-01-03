@@ -1,16 +1,32 @@
-# studybuddy
+# Educational Assistant App Study Buddy
 
-A new Flutter project.
+## Introduction
+Educational Assistant App is designed to support children in their learning journey, offering an interactive and engaging way to check their knowledge. This app is built using Flutter and is available for both mobile and web platforms.
 
-## Getting Started
+## Table of Contents
+- [Features](#features)
+- [Usage](#usage)
+- [Backend Integration](#backend-integration)
+- [ToDo: Token Counting and Billing](#todo-token-counting-and-billing)
+- [License](#license)
 
-This project is a starting point for a Flutter application.
+## Features
+- **User Roles:** Admin, Subscriber, Guest
+- **Multi-language Support:** EN, DE, HR, HU
+- **Kids-Friendly Interface**
+- **Backend Integration:** Google Vision, OpenAI, Firebase, Firestore
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
+For a guide on using the app, refer to the [User Manual](https://github.com/mklobucaric/studybuddy/UserManual.md).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Backend Integration:
+The app integrates with backend of the Educational Assistant App, visit [Study Buddy Backend](https://github.com/mklobucaric/studybuddy-backend). 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ToDo: Token Counting and Billing
+Token counting and billing functionalities are under development.
+
+## License
+This project is licensed under [include license here].
+
+
+
