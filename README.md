@@ -20,12 +20,14 @@ Educational Assistant App is designed to support children in their learning jour
 ## Usage
 For a guide on using the app, refer to the [User Manual](UserManual.md).
 
-## App screenshots
+## App Screenshots
 
-<img src="screenshots/home_view.jpg" alt="App home view" width="250">
-<img src="screenshots/qa.jpg" alt="App questions view" width="250">
-<img src="screenshots/follow_up_questions.jpg" alt="App follow up questions view" width="250"><br>
-<b>Apps Home, Q&A and Follow-Up Questions View</b>
+<p float="left">
+  <img src="screenshots/home_view.jpg" alt="App home view" width="250" />
+  <img src="screenshots/qa.jpg" alt="App questions view" width="250" />
+  <img src="screenshots/follow_up_questions.jpg" alt="App follow up questions view" width="250" />
+</p>
+<b>Apps Home, Q&A, and Follow-Up Questions View</b>
 
 ## Backend Integration:
 The app integrates with backend of the Educational Assistant App, visit [Study Buddy Backend](https://github.com/mklobucaric/studybuddy-backend). 
