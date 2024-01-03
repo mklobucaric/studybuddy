@@ -10,19 +10,19 @@ This manual provides detailed instructions on how to use Educational App.
 
 ## App Features
 - **User Roles:** Admin, Subscriber, and Guest. New users are guests by default and have limited access.
-- **Localization:** Supports English, German, Croatian, and Hungarian. <a href="screenshots/localization.jpg"><img src="screenshots/localization.jpg" alt="Localization Screenshot" width="100"/></a>
+- **Localization:** Supports English, German, Croatian, and Hungarian.<br> <a href="screenshots/localization.jpg"><img src="screenshots/localization.jpg" alt="Localization Screenshot" width="100"/></a>
 - **Kids-Friendly Interface:** Designed to be user-friendly for children both in user interface and AI tutor responses.
 
 ## Navigating the App
-- **Registration:** Option to register with email <a href="screenshots/register.jpg"><img src="screenshots/register.jpg" alt="Register Screenshot" width="100"/></a>
-- **Login:** Options to login with email or Google.  <a href="screenshots/login.jpg"><img src="screenshots/login.jpg" alt="Login Screenshot" width="100"/></a>
-- **Logout:** Option to logout is displayed upon clicking on the user name.  <a href="screenshots/logout.jpg"><img src="screenshots/logout.jpg" alt="Logout Screenshot" width="100"/></a>
-- **Home View:** Access to main features like Take Photo, Pick Documents, View Questions, and Ask a Custom Question. <a href="screenshots/home_view.jpg"><img src="screenshots/home_view.jpg" alt="Home View Screenshot" width="100"/></a>
+- **Registration:** Option to register with email <br><a href="screenshots/register.jpg"><img src="screenshots/register.jpg" alt="Register Screenshot" width="100"/></a>
+- **Login:** Options to login with email or Google. <br> <a href="screenshots/login.jpg"><img src="screenshots/login.jpg" alt="Login Screenshot" width="100"/></a>
+- **Logout:** Option to logout is displayed upon clicking on the user name. <br> <a href="screenshots/logout.jpg"><img src="screenshots/logout.jpg" alt="Logout Screenshot" width="100"/></a>
+- **Home View:** Access to main features like Take Photo, Pick Documents, View Questions, and Ask a Custom Question.<br> <a href="screenshots/home_view.jpg"><img src="screenshots/home_view.jpg" alt="Home View Screenshot" width="100"/></a>
 - **History in Left Drawer:** This section is designed to provide a quick overview and efficient navigation for past activities.
   - **Display Elements:** Each entry displays the date, subject, and a brief summary.
   - **Interaction Details:**
     - **Expand/Collapse Summary:** Clicking on the 'Brief Summary' text will expand the summary to provide more details. Clicking again will retract it to the brief view.
-    - **Navigation to QA View:** Clicking on either the date or the subject of an entry will route the user to the relevant QA view, providing a more detailed exploration of that particular activity.
+    - **Navigation to QA View:** Clicking on either the date or the subject of an entry will route the user to the relevant QA view, providing a more detailed exploration of that particular activity.<br>
   <a href="screenshots/history.jpg"><img src="screenshots/history.jpg" alt="History" width="100"/></a>
 - **Easy Navigation to Home:** In any view other than the Home view, users can quickly return to the Home view by clicking on the "Study Buddy" text. This offers a convenient and quick way to navigate back to the main dashboard from any part of the app.
 
@@ -39,7 +39,7 @@ This manual provides detailed instructions on how to use Educational App.
     - **Multiple Selections:** Users can choose multiple images containing text from their local storage. This flexibility allows for a comprehensive analysis of longer text documents at once.
     - **Initiating Analysis:** After selecting the desired images, users can proceed by clicking the 'send' icon or an equivalent action button.
   - **Q&A Generation:** Upon uploading the images, the app processes the text within them to generate a customized Questions & Answers session.
-  - **Navigation to QA View:** Post-analysis, users are automatically directed to the QA view. This view presents the generated Questions & Answers, offering an interactive and informative exploration based on the text from the uploaded documents.
+  - **Navigation to QA View:** Post-analysis, users are automatically directed to the QA view. This view presents the generated Questions & Answers, offering an interactive and informative exploration based on the text from the uploaded documents. <br>
   - **Screenshot:** A visual representation of this feature is available for reference. <a href="screenshots/pick_documents.jpg"><img src="screenshots/pick_documents.jpg" alt="Pick Documents Screenshot" width="100"/></a>
 
   - **View Questions:** This view showcases the questions generated from the images uploaded through the 'Take Photo' or 'Pick Documents' features.
@@ -52,10 +52,10 @@ This manual provides detailed instructions on how to use Educational App.
   - **Interactive Learning with AI:**
     - **Processing New Questions:** Users can send their new questions for processing. The AI analyzes the relevant parts of the originally uploaded text and generates a kid-friendly answer based on this context and general knowledge.
     - **Iterative Questioning:** Users can ask multiple follow-up questions. Each time, the AI decides whether to refer to the saved text or to rely on its general knowledge for the response.
-    - **Formatted Conversation Display:** The exchange between the user and the AI assistant is displayed in a conversational format: User questions and AI responses are clearly demarcated for easy understanding.
-    <p>
-    <a href="screenshots/qa.jpg"><img src="screenshots/qa.jpg" alt="Questions View Screenshot" width="100"/></a> 
-    <a href="follow_up_questions.jpg"><img src="follow_up_questions.jpg" alt="Follow-Up Questions View Screenshot" width="100"/></a>
+    - **Formatted Conversation Display:** The exchange between the user and the AI assistant is displayed in a conversational format: User questions and AI responses are clearly demarcated for easy understanding.<br>
+    <p float="left">
+      <a href="screenshots/qa.jpg"><img src="screenshots/qa.jpg" alt="Questions View Screenshot" width="100"/></a> 
+      <a href="follow_up_questions.jpg"><img src="follow_up_questions.jpg" alt="Follow-Up Questions View Screenshot" width="100"/></a>
     </p> 
 - **Ask a Question:** This view is dedicated to interacting directly with the AI tutor for general inquiries.
   - **Functionality:**
@@ -67,7 +67,7 @@ This manual provides detailed instructions on how to use Educational App.
     - **Iterative Engagement:** Users can continue the conversation by asking additional questions, fostering an interactive learning environment.
   - **User Experience:**
     - **Streamlined Interface:** The layout is designed for ease of use, allowing users to focus on their questions and the AI's responses without distraction.
-    - **Real-time Interaction:** Questions are processed and answered in real time, offering a dynamic and responsive educational experience.
+    - **Real-time Interaction:** Questions are processed and answered in real time, offering a dynamic and responsive educational experience.<br>
    <a href="screenshots/custom_questions.jpg"><img src="screenshots/custom_questions.jpg" alt="Ask a Question Screenshot" width="100"/></a>
 
 ## Screenshots
