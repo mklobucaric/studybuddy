@@ -6,6 +6,7 @@ This manual provides detailed instructions on how to use Educational App.
 ## Table of Contents
 - [App Features](#app-features)
 - [Navigating the App](#navigating-the-app)
+- [Detailed Feature Use](#detailed-feature-use)
 - [Screenshots](#screenshots)
 
 ## App Features
@@ -31,7 +32,7 @@ This manual provides detailed instructions on how to use Educational App.
   - **Functionality:**
     - **Image Capture:** Users can take photos of text or materials they need help with.
     - **Q&A Generation and Navigation:** After capturing the image, users can click the 'send' icon. This action sends the photo for processing, whereupon a Questions & Answers session is generated based on the text in the image. 
-  - **User Experience:** Upon completion of Questions & Answers generation, the app automatically routes the user to the relevant QA view. This view displays the generated Q&A, providing interactive and informative assistance based on the captured content.
+  - **User Experience:** Upon completion of Questions & Answers generation, the app automatically routes the user to the relevant QA view. This view displays the generated Q&A, providing interactive and informative assistance based on the captured content.<br>
   <a href="screenshots/take_photo.jpg"><img src="screenshots/take_photo.jpg" alt="Take Photo Screenshot" width="100"/></a>
 
 - **Pick Documents:** This feature enables users to select and upload multiple images from their local storage for analysis and assistance.
@@ -40,7 +41,7 @@ This manual provides detailed instructions on how to use Educational App.
     - **Initiating Analysis:** After selecting the desired images, users can proceed by clicking the 'send' icon or an equivalent action button.
   - **Q&A Generation:** Upon uploading the images, the app processes the text within them to generate a customized Questions & Answers session.
   - **Navigation to QA View:** Post-analysis, users are automatically directed to the QA view. This view presents the generated Questions & Answers, offering an interactive and informative exploration based on the text from the uploaded documents. <br>
-  - **Screenshot:** A visual representation of this feature is available for reference. <a href="screenshots/pick_documents.jpg"><img src="screenshots/pick_documents.jpg" alt="Pick Documents Screenshot" width="100"/></a>
+   <a href="screenshots/pick_documents.jpg"><img src="screenshots/pick_documents.jpg" alt="Pick Documents Screenshot" width="100"/></a>
 
   - **View Questions:** This view showcases the questions generated from the images uploaded through the 'Take Photo' or 'Pick Documents' features.
   - **Interactive Q&A Display:**
@@ -55,7 +56,7 @@ This manual provides detailed instructions on how to use Educational App.
     - **Formatted Conversation Display:** The exchange between the user and the AI assistant is displayed in a conversational format: User questions and AI responses are clearly demarcated for easy understanding.<br>
     <p float="left">
       <a href="screenshots/qa.jpg"><img src="screenshots/qa.jpg" alt="Questions View Screenshot" width="100"/></a> 
-      <a href="follow_up_questions.jpg"><img src="follow_up_questions.jpg" alt="Follow-Up Questions View Screenshot" width="100"/></a>
+      <a href="screenshots/follow_up_questions.jpg"><img src="screenshots/follow_up_questions.jpg" alt="Follow-Up Questions View Screenshot" width="100"/></a>
     </p> 
 - **Ask a Question:** This view is dedicated to interacting directly with the AI tutor for general inquiries.
   - **Functionality:**

@@ -35,8 +35,6 @@ The app integrates with backend of the Educational Assistant App, visit [Study B
 ## ToDo: Token Counting and Billing
 Token counting and billing functionalities are under development.
 
-## License
-This project is licensed under [include license here].
 
 
 
