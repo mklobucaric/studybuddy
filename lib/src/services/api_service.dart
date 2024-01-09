@@ -143,6 +143,7 @@ class ApiService {
     } catch (e) {
       if (kDebugMode) {
         print('Error handling for various exceptions');
+        print(e);
       }
 
       return false;

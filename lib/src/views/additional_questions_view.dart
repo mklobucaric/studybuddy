@@ -89,8 +89,12 @@ class _AdditionalQuestionsViewState extends State<AdditionalQuestionsView> {
       List<Map<String, String>> backendMessages =
           await _apiService.sendQuestionAndGetAnswer(
               messages, languageCode, qaContent!, userQuestion);
+      final assistantResponse = backendMessages.last;
+      String assistantContent = assistantResponse['content']!;
       setState(() {
-        messages = backendMessages;
+        messages.add({"role": "user", "content": userQuestion});
+        messages.add({"role": "assistant", "content": assistantContent});
+        //messages = backendMessages;
       });
     } catch (e) {
       // Handle error

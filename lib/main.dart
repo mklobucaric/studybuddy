@@ -10,23 +10,26 @@ import 'package:studybuddy/src/utils/localization.dart';
 import 'package:studybuddy/src/controllers/locale_provider.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:studybuddy/src/states/upload_state.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+//import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   // Ensure proper initialization of Flutter bindings.
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables from .env file.
-  await dotenv.load(fileName: ".env");
+  //await dotenv.load(fileName: ".env");
 
   // Initialize Firebase with the current platform's default options.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  const recaptchaSiteKey = String.fromEnvironment('RECAPTCHA_SITE_KEY');
+
   // Activate Firebase App Check to improve app security.
   await FirebaseAppCheck.instance.activate(
-    webProvider: ReCaptchaV3Provider(dotenv.env['RECAPTCHA_SITE_KEY']!),
+    webProvider: ReCaptchaV3Provider(recaptchaSiteKey),
+    //webProvider: ReCaptchaV3Provider(dotenv.env['RECAPTCHA_SITE_KEY']!),
     // Configure the preferred Android provider for app integrity checks.
     androidProvider: AndroidProvider.playIntegrity,
   );

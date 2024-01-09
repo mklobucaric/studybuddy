@@ -19,6 +19,7 @@ lib/firebase_options.dart
 .metadata
 analysis_options.yaml
 studybuddy.code-workspace
+.firebase/
 
 
 # If you're building an application, you may want to check-in your pubspec.lock
