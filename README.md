@@ -37,7 +37,7 @@ For more detailed information about the backend capabilities, please refer to [B
 <b>Apps Home, Q&A, and Follow-Up Questions View</b>
 
 ## User Manual
-For a detailed guide on using the app, please refer to the [User Manual](docs/UserManual.md).
+For a detailed guide on using the app, please refer to the [User Manual](UserManual.md).
 
 ## App Usage Highlights
 - **Interactive Q&A:** Engage with the app through image/text uploads.
