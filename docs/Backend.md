@@ -1,7 +1,7 @@
 # Study Buddy Backend
 
 ## Introduction
-The backend for the Educational Assistant App, Study Buddy, supports the app's interactive and educational features. Built using Flask/Python, it integrates with services like Firebase, Google Vision, and OpenAI, providing a robust and scalable platform for educational assistance.
+The backend for the Educational Assistant App, Study Buddy, supports the app's interactive and educational features. Built using Flask/Python, it integrates with services like Firebase, Google Vision, and OpenAI, providing a robust and scalable platform for educational assistance. For access to the backend code or further inquiries, please reach out to me at mario.klobucaric@gmail.com.
 
 ## Table of Contents
 - [Overview](#overview)
