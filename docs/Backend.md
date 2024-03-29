@@ -16,7 +16,7 @@ The backend for the Educational Assistant App, Study Buddy, supports the app's i
 - [App Integration](#app-integration)
 - [Technology Stack](#technology-stack)
 - [Future Enhancements](#future-enhancements)
-- [Links](#links)
+- [Links to Repository](#links)
 
 ## Overview
 The backend is structured in packages and modules to handle various functionalities ranging from authentication to data processing and storage.
