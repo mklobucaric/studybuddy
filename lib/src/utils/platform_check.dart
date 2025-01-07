@@ -4,10 +4,13 @@ String getBaseUrl() {
   if (kIsWeb) {
     // Web-specific code
     //return 'http://127.0.0.1:5000'; // Or your production API URL
-    return 'https://studybuddy.solutions';
+    //35.209.18.66
+    //return 'https://studybuddy.solutions';
+    return 'http://35.209.18.66';
   } else {
     // Fallback for other platforms
-    return 'https://studybuddy.solutions';
+    // return 'https://studybuddy.solutions';
+    return 'http://35.209.18.66';
     //return 'http://10.0.2.2';
   }
 }
